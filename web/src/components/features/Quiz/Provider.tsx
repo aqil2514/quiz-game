@@ -10,6 +10,7 @@ import React, {
 import { defaultGameTime, defaultQuizState } from "./variables";
 import { GameTime } from "@/@types/time";
 import { useRouter } from "next/navigation";
+import { useConfigStore } from "@/store/config-store";
 
 interface QuizContextState {
   questions: QuizQuestion[];
@@ -38,12 +39,13 @@ interface QuizProviderProps {
 }
 
 export function QuizProvider({ children, questions }: QuizProviderProps) {
+  const { timer } = useConfigStore();
   const [currentQuiz, setCurrentQuiz] = useState<number>(0);
   const [quizState, setQuizState] = useState<QuizState>(defaultQuizState);
   const [correctAnswers, setCorrectAnswers] = useState<number>(0);
   const [filteredQuestions, setFilteredQuestions] =
     useState<QuizQuestion[]>(questions);
-  const [gameTime, setGameTime] = useState<GameTime>(defaultGameTime);
+  const [gameTime, setGameTime] = useState<GameTime>(defaultGameTime(timer));
   const router = useRouter();
 
   const nextQuestions = questions[currentQuiz + 1];
@@ -56,14 +58,14 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
     setQuizState(defaultQuizState);
     setCorrectAnswers(0);
     setCurrentQuiz(0);
-    setGameTime(defaultGameTime());
+    setGameTime(defaultGameTime(timer));
     router.refresh();
   };
 
   const skipHandler = () => {
     if (!nextQuestions) return;
 
-    setGameTime(defaultGameTime());
+    setGameTime(defaultGameTime(timer));
     setCurrentQuiz((prev) => prev + 1);
     setQuizState((prev) => ({ ...prev, isPausedUser: false }));
   };

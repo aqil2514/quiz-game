@@ -1,33 +1,10 @@
 "use client";
 
-import { HistoryIcon, InfoIcon, PlayIcon } from "lucide-react";
 import MainContainer from "../layouts/Container/MainContainer";
 import { motion } from "framer-motion";
-import { Button } from "../ui/button";
-import { useRouter } from "next/navigation";
+import MenuItems from "../features/Home/MenuItems";
 
 export default function HomeTemplate() {
-  const router = useRouter();
-  const menuItems = [
-    {
-      label: "Mulai Kuis",
-      icon: <PlayIcon className="w-5 h-5" />,
-      onClick: () => router.push("/quiz"),
-      bg: "bg-green-600 hover:bg-green-700 text-white",
-    },
-    {
-      label: "Petunjuk",
-      icon: <InfoIcon className="w-5 h-5" />,
-      onClick: () => alert("Fitur belum tersedia."),
-      bg: "bg-blue-600 hover:bg-blue-700 text-white",
-    },
-    {
-      label: "Riwayat Skor",
-      icon: <HistoryIcon className="w-5 h-5" />,
-      onClick: () => alert("Fitur belum tersedia."),
-      bg: "bg-zinc-200 hover:bg-zinc-300 text-black",
-    },
-  ] as const;
   return (
     <MainContainer className="min-h-screen flex items-center justify-center p-6">
       <motion.div
@@ -54,23 +31,7 @@ export default function HomeTemplate() {
           Pilih salah satu menu berikut untuk memulai
         </motion.p>
 
-        <motion.div
-          className="flex flex-col gap-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          {menuItems.map((item) => (
-            <Button
-              key={item.label}
-              onClick={item.onClick}
-              className={`text-lg py-6 px-4 font-semibold flex items-center justify-center gap-2 rounded-xl transition-all duration-200 ${item.bg}`}
-            >
-              {item.icon}
-              {item.label}
-            </Button>
-          ))}
-        </motion.div>
+        <MenuItems />
       </motion.div>
     </MainContainer>
   );

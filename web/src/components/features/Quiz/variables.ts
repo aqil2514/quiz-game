@@ -7,11 +7,12 @@ export const defaultQuizState: QuizState = {
   isFinished: false,
   isPaused: false,
   isPausedUser: false,
+  isConfig: false,
 };
 
-export const defaultGameTime: () => GameTime = () => {
+export const defaultGameTime = (initTime?: number) => {
+  if (!initTime) initTime = 60;
   const maxValue = 100;
-  const initTime = 60;
   const distance = maxValue / initTime;
 
   const gameTime: GameTime = {
