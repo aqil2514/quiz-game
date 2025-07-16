@@ -1,14 +1,16 @@
+import { QuizState } from "@/@types/quiz";
 import { GameTime } from "@/@types/time";
-import { QuizState } from "./interface";
 
 export const defaultQuizState: QuizState = {
   isAnswered: false,
   isCorrect: false,
+  isFinished: false,
+  isPaused: false,
 };
 
 export const defaultGameTime: () => GameTime = () => {
   const maxValue = 100;
-  const initTime = 10;
+  const initTime = 3;
   const distance = maxValue / initTime;
 
   const gameTime: GameTime = {

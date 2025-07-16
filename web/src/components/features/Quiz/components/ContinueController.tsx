@@ -1,11 +1,10 @@
 import ControllerContainer from "@/components/layouts/Container/ControllerContainer";
-import { useControllerLogics } from "./logics";
+import { useControllerLogics } from "../hooks/useControllerLogics";
 import { Button } from "@/components/ui/button";
 
 export default function ContinueController() {
   const {
     clickHandler,
-    isFinished,
     quizState,
     amountQuestion,
     correctAnswers,
@@ -15,7 +14,7 @@ export default function ContinueController() {
     gameTime,
   } = useControllerLogics();
 
-  if (isFinished) {
+  if (quizState.isFinished) {
     const isPerfect = score === 100;
     const isGood = score >= 70;
     const emoji = isPerfect ? "🏆" : isGood ? "🎉" : "💪";
@@ -46,7 +45,7 @@ export default function ContinueController() {
             <p>Jawaban Benar:</p>
             <p>{correctAnswers}</p>
             <p>Waktu Mengerjakan:</p>
-            <p>{gameTime.accumulate} detik</p>
+            <p>{gameTime.accumulate.toFixed()} detik</p>
           </div>
 
           <Button

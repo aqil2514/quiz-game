@@ -1,10 +1,10 @@
 "use client";
 import { QuizQuestion } from "@/@types/quiz";
 import MainContainer from "../layouts/Container/MainContainer";
-import QuizCard from "../organisms/Quiz/QuizCard";
-import { QuizProvider } from "../organisms/Quiz/Provider";
-import ContinueController from "../organisms/Quiz/ContinueController";
-import Timer from "../organisms/Quiz/Timer";
+import QuizCard from "../features/Quiz/components/QuizCard";
+import { QuizProvider } from "../features/Quiz/Provider";
+import ContinueController from "../features/Quiz/components/ContinueController";
+import Timer from "../features/Quiz/components/Timer";
 
 interface QuizTemplateProps {
   questions: QuizQuestion[];

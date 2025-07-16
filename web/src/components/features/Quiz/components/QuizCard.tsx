@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useQuizCardLogics } from "./logics";
+import { useQuizCardLogics } from "../hooks/useQuizCardLogics";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 

@@ -1,5 +1,5 @@
 "use client";
-import { QuizQuestion } from "@/@types/quiz";
+import { QuizQuestion, QuizState } from "@/@types/quiz";
 import React, {
   createContext,
   Dispatch,
@@ -7,7 +7,6 @@ import React, {
   useContext,
   useState,
 } from "react";
-import { QuizState } from "./interface";
 import { defaultGameTime, defaultQuizState } from "./variables";
 import { GameTime } from "@/@types/time";
 
@@ -21,10 +20,6 @@ interface QuizContextState {
   setQuizState: Dispatch<SetStateAction<QuizState>>;
   correctAnswers: number;
   setCorrectAnswers: Dispatch<SetStateAction<number>>;
-  isFinished: boolean;
-  setIsFinished: Dispatch<SetStateAction<boolean>>;
-  isPaused: boolean;
-  setIsPaused: Dispatch<SetStateAction<boolean>>;
   nextQuestions: QuizQuestion;
   setGameTime: Dispatch<SetStateAction<GameTime>>;
   gameTime: GameTime;
@@ -43,8 +38,6 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
   const [correctAnswers, setCorrectAnswers] = useState<number>(0);
   const [filteredQuestions, setFilteredQuestions] =
     useState<QuizQuestion[]>(questions);
-  const [isPaused, setIsPaused] = useState<boolean>(false);
-  const [isFinished, setIsFinished] = useState<boolean>(false);
   const [gameTime, setGameTime] = useState<GameTime>(defaultGameTime);
 
   const nextQuestions = questions[currentQuiz + 1];
@@ -59,11 +52,7 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
     filteredQuestions,
     setFilteredQuestions,
     setCorrectAnswers,
-    isFinished,
     nextQuestions,
-    setIsFinished,
-    isPaused,
-    setIsPaused,
     gameTime,
     setGameTime,
   };

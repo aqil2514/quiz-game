@@ -1,5 +1,5 @@
 import { Progress } from "@/components/ui/progress";
-import { useTimerLogics } from "./logics";
+import { useTimerLogics } from "../hooks/useTimerLogics";
 
 export default function Timer() {
 const { seconds, gameTime } = useTimerLogics()
