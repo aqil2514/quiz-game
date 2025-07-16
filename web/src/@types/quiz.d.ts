@@ -13,4 +13,5 @@ export interface QuizState {
   isAnswered: boolean;
   isFinished: boolean;
   isPaused: boolean;
+  isPausedUser: boolean;
 }

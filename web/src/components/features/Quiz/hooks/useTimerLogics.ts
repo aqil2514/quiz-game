@@ -38,7 +38,7 @@ import { defaultQuizState } from "../variables";
      * Jika mencapai 0, maka interval akan dihentikan.
      */
     useEffect(() => {
-      if (quizState.isPaused) return;
+      if (quizState.isPaused || quizState.isPausedUser) return;
 
       const interval = setInterval(() => {
         setGameTime((prev) => {
@@ -51,7 +51,7 @@ import { defaultQuizState } from "../variables";
       }, 1000);
 
       return () => clearInterval(interval);
-    }, [gameTime.distance, setGameTime, quizState.isPaused]);
+    }, [gameTime.distance, setGameTime, quizState.isPaused, quizState.isPausedUser]);
 
     /**
      * useEffect ini akan dijalankan ketika `gameTime.current` mencapai 0.

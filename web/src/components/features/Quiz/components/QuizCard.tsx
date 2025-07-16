@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuizCardLogics } from "../hooks/useQuizCardLogics";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { fadeUpVariants } from "@/lib/motionVariants";
 
 export default function QuizCard() {
   const { clickHandler, question, currentQuiz, quizState, answer } =
@@ -10,9 +11,9 @@ export default function QuizCard() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
+      variants={fadeUpVariants}
+      initial="hidden"
+      animate="visible"
       className="w-full flex justify-center items-center"
     >
       <Card className="bg-blue-200/50 border-none shadow-blue-100 shadow-md w-3/4">
@@ -20,7 +21,7 @@ export default function QuizCard() {
           <CardTitle>Pertanyaan #{currentQuiz + 1}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-xl font-bold">{question.question}</p>
+          <p className={cn("text-xl font-bold", quizState.isPausedUser && "blur-sm")}>{question.question}</p>
           {quizState.isAnswered && (
             <p
               className={`${
@@ -36,6 +37,7 @@ export default function QuizCard() {
             {question.options.map((q) => {
               const isSelected = quizState.isAnswered;
               const isCorrectAnswer = isSelected && q === answer;
+              const isPaused = quizState.isPausedUser;
 
               return (
                 <Button
@@ -43,7 +45,8 @@ export default function QuizCard() {
                   data-option={q}
                   className={cn(
                     "bg-blue-400 hover:bg-blue-500 active:scale-90 duration-200 cursor-pointer",
-                    isCorrectAnswer && "bg-green-500"
+                    isCorrectAnswer && "bg-green-500",
+                    isPaused && "blur-sm"
                   )}
                   onClick={clickHandler}
                 >

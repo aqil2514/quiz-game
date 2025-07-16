@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { defaultGameTime, defaultQuizState } from "./variables";
 import { GameTime } from "@/@types/time";
+import { useRouter } from "next/navigation";
 
 interface QuizContextState {
   questions: QuizQuestion[];
@@ -23,6 +24,10 @@ interface QuizContextState {
   nextQuestions: QuizQuestion;
   setGameTime: Dispatch<SetStateAction<GameTime>>;
   gameTime: GameTime;
+  resetHandler: () => void;
+  resumeHandler: () => void;
+  skipHandler: () => void;
+  exitHandler: () => void;
 }
 
 const QuizContext = createContext<QuizContextState>({} as QuizContextState);
@@ -39,8 +44,37 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
   const [filteredQuestions, setFilteredQuestions] =
     useState<QuizQuestion[]>(questions);
   const [gameTime, setGameTime] = useState<GameTime>(defaultGameTime);
+  const router = useRouter();
 
   const nextQuestions = questions[currentQuiz + 1];
+
+  /**
+   * Handler untuk me-reset seluruh kuis dan mengembalikan ke kondisi awal.
+   * Ini termasuk mengatur ulang index soal, skor, status kuis, dan timer.
+   */
+  const resetHandler = () => {
+    setQuizState(defaultQuizState);
+    setCorrectAnswers(0);
+    setCurrentQuiz(0);
+    setGameTime(defaultGameTime());
+    router.refresh();
+  };
+
+  const skipHandler = () => {
+    if (!nextQuestions) return;
+
+    setGameTime(defaultGameTime());
+    setCurrentQuiz((prev) => prev + 1);
+    setQuizState((prev) => ({ ...prev, isPausedUser: false }));
+  };
+
+  const resumeHandler = () => {
+    setQuizState((prev) => ({ ...prev, isPausedUser: false }));
+  };
+
+  const exitHandler = () => {
+    router.push("/");
+  };
 
   const value: QuizContextState = {
     questions,
@@ -55,6 +89,10 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
     nextQuestions,
     gameTime,
     setGameTime,
+    resetHandler,
+    resumeHandler,
+    skipHandler,
+    exitHandler,
   };
 
   return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;

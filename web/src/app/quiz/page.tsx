@@ -1,6 +1,11 @@
 import { QuizQuestion } from "@/@types/quiz";
 import QuizTemplate from "@/components/templates/QuizTemplate";
 import { shuffle } from "@/lib/utils";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Mulai Kuis",
+};
 
 // Nanti Rawnya dari server
 const raw: QuizQuestion[] = [

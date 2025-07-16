@@ -13,7 +13,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Quiz",
+  title: {
+    template: `%s | Quiz`,
+    default: "Main Menu | Quiz",
+  },
   description: "Quiz",
 };
 
