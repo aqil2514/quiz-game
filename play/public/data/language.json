@@ -1,0 +1,112 @@
+[
+  {
+    "id": "language-1",
+    "category": "language",
+    "question": "Manakah sinonim dari kata 'cerdas'?",
+    "options": ["Bodoh", "Pintar", "Lambat", "Malas"],
+    "answer": "Pintar",
+    "explanation": "Sinonim 'cerdas' adalah 'pintar'.",
+    "timeLimitSeconds": 20
+  },
+  {
+    "id": "language-2",
+    "category": "language",
+    "question": "Apakah makna dari kata 'harfiah'?",
+    "options": [
+      "Bersifat imajinatif",
+      "Makna sesuai teks asli",
+      "Makna kiasan",
+      "Makna tersirat"
+    ],
+    "answer": "Makna sesuai teks asli",
+    "explanation": "'Harfiah' berarti makna sebenarnya dari sebuah kata atau kalimat.",
+    "timeLimitSeconds": 20
+  },
+  {
+    "id": "language-3",
+    "category": "language",
+    "question": "Antonim dari kata 'tinggi' adalah?",
+    "options": ["Panjang", "Dalam", "Rendah", "Lepas"],
+    "answer": "Rendah",
+    "explanation": "Tinggi lawannya adalah rendah.",
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "language-4",
+    "category": "language",
+    "question": "Kata 'berlari' termasuk jenis kata?",
+    "options": ["Kata kerja", "Kata benda", "Kata sifat", "Kata keterangan"],
+    "answer": "Kata kerja",
+    "explanation": "'Berlari' adalah kata kerja karena menunjukkan aksi.",
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "language-5",
+    "category": "language",
+    "question": "Kalimat manakah yang termasuk kalimat perintah?",
+    "options": [
+      "Saya suka makan roti.",
+      "Tolong ambilkan buku itu.",
+      "Dia sedang belajar.",
+      "Apakah kamu sudah makan?"
+    ],
+    "answer": "Tolong ambilkan buku itu.",
+    "explanation": "Itu adalah bentuk kalimat perintah.",
+    "timeLimitSeconds": 20
+  },
+  {
+    "id": "language-6",
+    "category": "language",
+    "question": "Kata baku dari 'resiko' adalah?",
+    "options": ["Resiko", "Risiko", "Risko", "Riziko"],
+    "answer": "Risiko",
+    "explanation": "'Risiko' adalah bentuk baku menurut KBBI.",
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "language-7",
+    "category": "language",
+    "question": "Manakah yang termasuk kata sifat?",
+    "options": ["Cantik", "Lari", "Buku", "Di atas"],
+    "answer": "Cantik",
+    "explanation": "'Cantik' menggambarkan sifat.",
+    "timeLimitSeconds": 10
+  },
+  {
+    "id": "language-8",
+    "category": "language",
+    "question": "Kalimat majemuk adalah kalimat yang...",
+    "options": [
+      "Hanya punya satu subjek",
+      "Terdiri dari dua klausa atau lebih",
+      "Berisi kata benda saja",
+      "Tidak mengandung predikat"
+    ],
+    "answer": "Terdiri dari dua klausa atau lebih",
+    "explanation": "Kalimat majemuk mengandung dua klausa.",
+    "timeLimitSeconds": 20
+  },
+  {
+    "id": "language-9",
+    "category": "language",
+    "question": "Kalimat 'Dia pergi ke sekolah pagi-pagi sekali.' termasuk jenis...",
+    "options": [
+      "Kalimat tanya",
+      "Kalimat berita",
+      "Kalimat perintah",
+      "Kalimat larangan"
+    ],
+    "answer": "Kalimat berita",
+    "explanation": "Kalimat tersebut menyampaikan informasi.",
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "language-10",
+    "category": "language",
+    "question": "Kata 'menyapu' adalah bentuk kata kerja yang diawali dengan imbuhan?",
+    "options": ["Me-", "Di-", "Ber-", "Ter-"],
+    "answer": "Me-",
+    "explanation": "Menyapu adalah kata kerja dengan imbuhan 'me-'.",
+    "timeLimitSeconds": 15
+  }
+]

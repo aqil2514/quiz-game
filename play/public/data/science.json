@@ -1,0 +1,92 @@
+[
+  {
+    "id": "science-1",
+    "category": "science",
+    "question": "Planet manakah yang paling dekat dengan Matahari?",
+    "options": ["Mars", "Venus", "Merkurius", "Bumi"],
+    "answer": "Merkurius",
+    "explanation": "Merkurius adalah planet terdekat dengan Matahari.",
+    "timeLimitSeconds": 20
+  },
+  {
+    "id": "science-2",
+    "category": "science",
+    "question": "Air mendidih pada suhu berapa derajat Celcius?",
+    "options": ["90°C", "80°C", "100°C", "120°C"],
+    "answer": "100°C",
+    "explanation": "Air mendidih pada suhu 100°C pada tekanan atmosfer normal.",
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "science-3",
+    "category": "science",
+    "question": "Apa fungsi utama daun pada tumbuhan?",
+    "options": ["Bernapas", "Menyerap air", "Fotosintesis", "Menyerap cahaya UV"],
+    "answer": "Fotosintesis",
+    "explanation": "Daun berfungsi untuk fotosintesis.",
+    "timeLimitSeconds": 20
+  },
+  {
+    "id": "science-4",
+    "category": "science",
+    "question": "Air termasuk zat apa?",
+    "options": ["Gas", "Cair", "Padat", "Campuran"],
+    "answer": "Cair",
+    "explanation": "Air dalam kondisi normal adalah zat cair.",
+    "timeLimitSeconds": 10
+  },
+  {
+    "id": "science-5",
+    "category": "science",
+    "question": "Organ pernapasan manusia yang utama adalah?",
+    "options": ["Hidung", "Paru-paru", "Jantung", "Trakea"],
+    "answer": "Paru-paru",
+    "explanation": "Paru-paru adalah organ utama untuk bernapas.",
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "science-6",
+    "category": "science",
+    "question": "Hewan yang berkembang biak dengan cara bertelur disebut?",
+    "options": ["Vivipar", "Ovovivipar", "Ovipar", "Metamorf"],
+    "answer": "Ovipar",
+    "explanation": "Ovipar adalah hewan yang bertelur.",
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "science-7",
+    "category": "science",
+    "question": "Zat makanan yang berfungsi sebagai sumber energi adalah?",
+    "options": ["Protein", "Vitamin", "Karbohidrat", "Mineral"],
+    "answer": "Karbohidrat",
+    "explanation": "Karbohidrat adalah sumber utama energi.",
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "science-8",
+    "category": "science",
+    "question": "Planet terbesar di tata surya adalah?",
+    "options": ["Saturnus", "Neptunus", "Jupiter", "Uranus"],
+    "answer": "Jupiter",
+    "explanation": "Jupiter adalah planet terbesar.",
+    "timeLimitSeconds": 20
+  },
+  {
+    "id": "science-9",
+    "category": "science",
+    "question": "Bagian mata yang memberi warna disebut?",
+    "options": ["Kornea", "Retina", "Iris", "Lensa"],
+    "answer": "Iris",
+    "explanation": "Iris memberi warna pada mata.",
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "science-10",
+    "category": "science",
+    "question": "Bumi mengelilingi Matahari dalam waktu?",
+    "options": ["30 hari", "12 bulan", "24 jam", "7 hari"],
+    "answer": "12 bulan",
+    "explanation": "Bumi butuh 1 tahun atau 12 bulan untuk mengelilingi Matahari.",
+    "timeLimitSeconds": 20
+  }
+]

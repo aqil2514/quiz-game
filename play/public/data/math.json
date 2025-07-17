@@ -1,0 +1,92 @@
+[
+  {
+    "id": "math-1",
+    "category": "math",
+    "question": "Berapakah hasil dari 8 × 7?",
+    "options": ["54", "56", "64", "48"],
+    "answer": "56",
+    "explanation": "8 dikali 7 adalah 56.",
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "math-2",
+    "category": "math",
+    "question": "Hasil dari 12 + 15 adalah?",
+    "options": ["25", "26", "27", "28"],
+    "answer": "27",
+    "explanation": "12 + 15 = 27.",
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "math-3",
+    "category": "math",
+    "question": "Berapakah akar kuadrat dari 81?",
+    "options": ["7", "8", "9", "10"],
+    "answer": "9",
+    "explanation": "9 × 9 = 81.",
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "math-4",
+    "category": "math",
+    "question": "25 dibagi 5 hasilnya adalah?",
+    "options": ["4", "5", "6", "7"],
+    "answer": "5",
+    "explanation": "25 ÷ 5 = 5.",
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "math-5",
+    "category": "math",
+    "question": "Berapakah 15% dari 200?",
+    "options": ["30", "25", "35", "40"],
+    "answer": "30",
+    "explanation": "15% dari 200 adalah 0.15 × 200 = 30.",
+    "timeLimitSeconds": 20
+  },
+  {
+    "id": "math-6",
+    "category": "math",
+    "question": "Urutan bilangan ganjil pertama adalah?",
+    "options": ["0", "1", "2", "3"],
+    "answer": "1",
+    "explanation": "Bilangan ganjil pertama adalah 1.",
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "math-7",
+    "category": "math",
+    "question": "Berapa hasil dari 100 - 45?",
+    "options": ["45", "50", "55", "60"],
+    "answer": "55",
+    "explanation": "100 dikurangi 45 adalah 55.",
+    "timeLimitSeconds": 15
+  },
+  {
+    "id": "math-8",
+    "category": "math",
+    "question": "Hasil dari 3³ adalah?",
+    "options": ["6", "9", "27", "18"],
+    "answer": "27",
+    "explanation": "3 × 3 × 3 = 27.",
+    "timeLimitSeconds": 20
+  },
+  {
+    "id": "math-9",
+    "category": "math",
+    "question": "Berapakah hasil dari 0 × 999?",
+    "options": ["0", "1", "999", "Tidak terdefinisi"],
+    "answer": "0",
+    "explanation": "Bilangan berapapun dikalikan 0 hasilnya tetap 0.",
+    "timeLimitSeconds": 10
+  },
+  {
+    "id": "math-10",
+    "category": "math",
+    "question": "Sudut siku-siku besarnya adalah?",
+    "options": ["45°", "60°", "90°", "120°"],
+    "answer": "90°",
+    "explanation": "Sudut siku-siku selalu 90 derajat.",
+    "timeLimitSeconds": 15
+  }
+]
