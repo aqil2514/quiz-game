@@ -71,6 +71,8 @@ export function useControllerLogics() {
     setQuizState((prev) => ({ ...prev, isConfig: false }));
   };
 
+  const current = questions[currentQuiz]
+
   return {
     clickHandler,
     quizState,
@@ -83,5 +85,6 @@ export function useControllerLogics() {
     setQuizState,
     exitHandler,
     closeConfigHandler,
+    current
   };
 }
