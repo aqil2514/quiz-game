@@ -24,7 +24,7 @@ STEP 3: Tambahkan Auth (Login/Daftar)
 Tujuan: Mulai menyimpan skor per user
 
 🔧 Fitur Tambahan:
-Halaman Login / Register
+✅Halaman Login / Register
 Skor disimpan ke backend (misalnya Supabase atau Firebase)
 Hanya user login yang bisa melihat riwayat
 ⚙️ Teknologi:

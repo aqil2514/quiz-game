@@ -4,6 +4,7 @@ import { registerFormSchema } from "../schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import axios, { isAxiosError } from "axios";
 
 export function useRegisterFormLogics() {
   const router = useRouter();
@@ -24,10 +25,19 @@ export function useRegisterFormLogics() {
     },
   });
 
-  const registerSubmitHandler = (
+  const registerSubmitHandler = async (
     values: z.infer<typeof registerFormSchema>
   ) => {
-    console.log(values);
+    try {
+      const { data } = await axios.post("/api/user", values);
+      console.log(data);
+    } catch (error) {
+      console.log(values);
+      if (isAxiosError(error)) {
+        const data = error.response?.data;
+        console.log(data);
+      }
+    }
   };
 
   const showPasswordHandler = (name: "password" | "confirm-password") => {

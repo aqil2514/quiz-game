@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useLoginFormLogics } from "./hooks/useLoginFormLogics";
 import { Eye, EyeClosed } from "lucide-react";
+import { signIn } from "next-auth/react";
 
 export default function LoginForm() {
   const {
@@ -97,7 +98,13 @@ export default function LoginForm() {
       {/* Login With Google */}
       <div>
         <p className="text-center font-bold text-lg">Atau</p>
-        <Button className="w-full cursor-pointer py-6" variant={"outline"}>
+        <Button
+          className="w-full cursor-pointer py-6"
+          variant={"outline"}
+          onClick={() =>
+            signIn("google", { redirectTo: "/?sonner-auth-success=true" })
+          }
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/icons/google.png" alt="Google Icons" className="w-8 h-8" />
           <p>Masuk dengan Google</p>

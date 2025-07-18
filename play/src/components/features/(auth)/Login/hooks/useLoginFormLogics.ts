@@ -2,8 +2,10 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginFormSchema } from "../schema";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { toast } from "sonner";
 
 export function useLoginFormLogics() {
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
@@ -15,14 +17,29 @@ export function useLoginFormLogics() {
       password: "",
     },
   });
+  const searchParams = useSearchParams();
+  const authError = searchParams.get("error");
+  const authCode = searchParams.get("code");
 
   const submitLoginHandler = (values: z.infer<typeof loginFormSchema>) => {
-    console.log(values);
+    signIn("credentials", values);
   };
 
   const showPasswordHandler = () => setIsShowPassword(!isShowPassword);
-  
-  const registerHandler = () => router.push("/register")
 
-  return { form, submitLoginHandler, showPasswordHandler, isShowPassword, registerHandler };
+  const registerHandler = () => router.push("/register");
+
+  useEffect(() => {
+    if (!authCode && !authError) return;
+    toast.error("Terjadi kesalahan");
+    router.replace("?");
+  }, [authError, authCode, router]);
+
+  return {
+    form,
+    submitLoginHandler,
+    showPasswordHandler,
+    isShowPassword,
+    registerHandler,
+  };
 }
