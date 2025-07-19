@@ -16,6 +16,6 @@ export class UserController {
   @UsePipes(ZodValidationPipe)
   @Post()
   async createNewUser(@Body() formData: RegisterFormDTO) {
-    return await this.userService.createNewUSer(formData as UserFormData) ;
+    return await this.userService.createNewUser(formData as UserFormData) ;
   }
 }

@@ -7,6 +7,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 
+const errorLoginMap: Record<string, string> = {
+  not_found_credentials: "Akun tidak ditemukan",
+  unauthorized_credentials: "Password salah",
+};
+
 export function useLoginFormLogics() {
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false);
   const router = useRouter();
@@ -31,7 +36,7 @@ export function useLoginFormLogics() {
 
   useEffect(() => {
     if (!authCode && !authError) return;
-    toast.error("Terjadi kesalahan");
+    toast.error(errorLoginMap[authCode as string]);
     router.replace("?");
   }, [authError, authCode, router]);
 

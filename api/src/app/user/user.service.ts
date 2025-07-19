@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { FirestoreService } from '../../services/firestore.service';
 import { User, UserFormData } from './user.interface';
 import * as bcrypt from 'bcrypt';
@@ -17,30 +21,25 @@ export class UserService {
     return hash;
   }
 
-  private async isDupplicateUsername(clientUsername: string) {
-    const users = await this.getAllUsers();
-    const username = users.find(
-      (user) =>
-        user.username.toLowerCase().trim() ===
-        clientUsername.toLowerCase().trim(),
-    );
-    if (username) return true;
-    return false;
+  private async isDupplicateEmail(clientEmail: string) {
+    const snapshot = await this.userRef
+      .where('email', '==', clientEmail.toLowerCase().trim())
+      .get();
+    return !snapshot.empty;
   }
 
-  private async isDupplicateEmail(clientEmail: string) {
-    const users = await this.getAllUsers();
-    const email = users.find(
-      (user) =>
-        user.email.toLowerCase().trim() === clientEmail.toLowerCase().trim(),
-    );
-    if (email) return true;
-    return false;
+  private async isDupplicateUsername(clientUsername: string) {
+    // Kalo ga ada username, berarti user login via Oauth. Lengkapinnya di Dashboard nanti
+    if (!clientUsername) return false;
+    const snapshot = await this.userRef
+      .where('username', '==', clientUsername.toLowerCase().trim())
+      .get();
+    return !snapshot.empty;
   }
 
   // Public Variables
 
-  async createNewUSer(formData: UserFormData) {
+  async createNewUser(formData: UserFormData) {
     const { username, email, password } = formData;
     const [isDupplicateEmail, isDupplicateUsername] = await Promise.all([
       this.isDupplicateEmail(email),
@@ -55,13 +54,15 @@ export class UserService {
       throw new ConflictException('Email sudah digunakan');
     }
 
-    const hashedPassword = await this.hashPassword(password);
+    // Password kosong kalau si pengguna pertama kali login dengan Oauth. Nanti akan diminta untuk melengkapi semuanya di halaman dashboard
+    const hashedPassword = password ? await this.hashPassword(password) : '';
 
     const data: User = {
       username,
       hashedPassword,
       email,
-      roles: ['user'],
+      name: formData.username,
+      roles: formData.roles ?? ['user'],
     };
     await this.userRef.add(data);
     return { message: 'User berhasil dibuat' };
@@ -73,5 +74,35 @@ export class UserService {
       (doc) => ({ id: doc.id, ...doc.data() }) as User,
     );
     return users;
+  }
+
+  async getUserByEmail(email: string) {
+    const snapshot = await this.userRef.where('email', '==', email).get();
+    const data: User = snapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+        }) as User,
+    )[0];
+
+    if (!data) throw new NotFoundException('Akun tidak ditemukan');
+
+    return data;
+  }
+
+  async getUserByUsername(username: string) {
+    const snapshot = await this.userRef.where('username', '==', username).get();
+    const data: User = snapshot.docs.map(
+      (doc) =>
+        ({
+          id: doc.id,
+          ...doc.data(),
+        }) as User,
+    )[0];
+
+    if (!data) throw new NotFoundException('Akun tidak ditemukan');
+
+    return data;
   }
 }

@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios, { isAxiosError } from "axios";
+import { toast } from "sonner";
 
 export function useRegisterFormLogics() {
   const router = useRouter();
@@ -30,12 +31,11 @@ export function useRegisterFormLogics() {
   ) => {
     try {
       const { data } = await axios.post("/api/user", values);
-      console.log(data);
+      toast.success(data.message);
     } catch (error) {
-      console.log(values);
       if (isAxiosError(error)) {
         const data = error.response?.data;
-        console.log(data);
+        toast.error(data.message);
       }
     }
   };

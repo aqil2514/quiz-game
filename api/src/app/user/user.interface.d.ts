@@ -1,6 +1,7 @@
 export interface User {
   readonly id?: string;
   username: string;
+  name: string;
   email: string;
   hashedPassword: string;
   roles: string[];
@@ -8,6 +9,8 @@ export interface User {
 
 export interface UserFormData {
   username: string;
+  name?: string;
+  roles?: string[];
   email: string;
   password: string;
   confirmPassword: string;

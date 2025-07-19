@@ -14,8 +14,14 @@ import { useRegisterFormLogics } from "./hooks/useRegisterFormLogics";
 import { Eye, EyeClosed } from "lucide-react";
 
 export default function RegisterForm() {
-  const { form, registerSubmitHandler, isShow, showPasswordHandler, loginHandler } =
-    useRegisterFormLogics();
+  const {
+    form,
+    registerSubmitHandler,
+    isShow,
+    showPasswordHandler,
+    loginHandler,
+  } = useRegisterFormLogics();
+  const isSubmitting = form.formState.isSubmitting;
 
   return (
     <div className="p-4 flex flex-col items-center justify-center">
@@ -32,7 +38,7 @@ export default function RegisterForm() {
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input placeholder="Masukkan Username..." {...field} />
+                  <Input disabled={isSubmitting} placeholder="Masukkan Username..." {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -47,7 +53,7 @@ export default function RegisterForm() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Masukkan email..." {...field} />
+                  <Input disabled={isSubmitting} placeholder="Masukkan email..." {...field} />
                 </FormControl>
                 <FormDescription>
                   Untuk autentikasi dan pemulihan
@@ -66,7 +72,7 @@ export default function RegisterForm() {
                 <FormLabel>Password</FormLabel>
                 <FormControl>
                   <div className="flex gap-2">
-                    <Input
+                    <Input disabled={isSubmitting}
                       type={isShow.password ? "text" : "password"}
                       placeholder="Masukkan password..."
                       {...field}
@@ -95,7 +101,7 @@ export default function RegisterForm() {
                 <FormLabel>Konfirmasi Password</FormLabel>
                 <FormControl>
                   <div className="flex gap-2">
-                    <Input
+                    <Input disabled={isSubmitting}
                       type={isShow.confirm ? "text" : "password"}
                       placeholder="Konfirmasi password..."
                       {...field}
@@ -119,12 +125,14 @@ export default function RegisterForm() {
             <Button
               type="submit"
               className="bg-blue-400 hover:bg-blue-500 cursor-pointer"
+              disabled={isSubmitting}
             >
-              Daftar
+              {isSubmitting ? "Memproses..." : "Daftar"}
             </Button>
             <Button
               type="button"
               variant={"outline"}
+              disabled={isSubmitting}
               className="cursor-pointer"
               onClick={loginHandler}
             >

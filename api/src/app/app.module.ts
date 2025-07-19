@@ -5,9 +5,10 @@ import { UserService } from './user/user.service';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { FirestoreService } from '../services/firestore.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [UserModule, ConfigModule.forRoot()],
+  imports: [UserModule, ConfigModule.forRoot(), AuthModule],
   controllers: [AppController],
   providers: [AppService, UserService, FirestoreService],
 })
