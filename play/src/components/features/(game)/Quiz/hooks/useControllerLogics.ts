@@ -1,6 +1,6 @@
-import { useConfigStore } from "@/store/config-store";
+import { useSession } from "next-auth/react";
 import { useQuizData } from "../Provider";
-import { defaultQuizState } from "../variables";
+import { getAndRunQuizTimer, getQuizScore } from "../utils";
 
 /**
  * Hook logika utama untuk mengelola alur kuis dan kontrol navigasi soal.
@@ -19,6 +19,7 @@ import { defaultQuizState } from "../variables";
  * }
  */
 export function useControllerLogics() {
+  const session = useSession();
   // Mengambil semua state dan updater yang dibutuhkan dari context
   const {
     quizState,
@@ -29,20 +30,12 @@ export function useControllerLogics() {
     questions,
     resetHandler,
     nextQuestions,
-    setGameTime,
-    gameTime,
     exitHandler,
+    setQuizTimer,
+    workTime,
   } = useQuizData();
-  const { timer } = useConfigStore();
 
   // Jumlah total soal
-  const amountQuestion = questions.length;
-
-  // Nilai akhir berdasarkan jumlah benar
-  const score =
-    amountQuestion > 0
-      ? Math.round((correctAnswers / amountQuestion) * 100)
-      : 0;
 
   /**
    * Handler untuk berpindah ke soal berikutnya.
@@ -51,40 +44,39 @@ export function useControllerLogics() {
    */
   const clickHandler = () => {
     if (!nextQuestions) {
-      setQuizState((prev) => ({ ...prev, isFinished: true, isPaused: true }));
+      setQuizState((prev) => ({ ...prev, isFinished: true }));
       return;
     }
 
+    setQuizTimer(getAndRunQuizTimer(nextQuestions));
     setCurrentQuiz(currentQuiz + 1);
-    setQuizState(defaultQuizState);
-    setQuizState((prev) => ({ ...prev, isPaused: false }));
-    setGameTime((prev) => {
-      return {
-        ...prev,
-        current: prev.next * Number(prev.distance),
-        next: timer,
-      };
-    });
+    setQuizState((prev) => ({ ...prev, isAnswered: false }));
   };
 
   const closeConfigHandler = () => {
     setQuizState((prev) => ({ ...prev, isConfig: false }));
+    setQuizTimer((prev) => ({ ...prev, isRunning: true }));
   };
 
-  const current = questions[currentQuiz]
+  const current = questions[currentQuiz];
+
+  const quizScore = getQuizScore({
+    correctAnswers,
+    questions,
+    userId: session.data?.user.id,
+    workTime,
+  });
 
   return {
     clickHandler,
     quizState,
-    amountQuestion,
     correctAnswers,
-    score,
     nextQuestions,
     resetHandler,
-    gameTime,
     setQuizState,
     exitHandler,
     closeConfigHandler,
-    current
+    current,
+    ...quizScore,
   };
 }

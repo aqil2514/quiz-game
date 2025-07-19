@@ -5,7 +5,7 @@ export interface QuizQuestion {
   options: string[];
   answer: string;
   explanation?: string;
-  timeLimitSeconds?: number;
+  timeLimitSeconds: number;
 }
 
 export interface QuizState {
@@ -22,6 +22,7 @@ export interface QuizScore {
   category: string;
   score: number;
   totalQuestions: number;
+  timeQuestTotal: number;
   duration: number;
   date: string;
 }

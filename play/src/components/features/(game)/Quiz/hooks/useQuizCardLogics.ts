@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { useQuizData } from "../Provider";
-import { useConfigStore } from "@/store/config-store";
-import { getAccumulateTime } from "../utils";
 
 /**
  * Hook logika utama untuk menangani interaksi pengguna dengan kuis.
@@ -26,10 +24,10 @@ export function useQuizCardLogics() {
     quizState,
     setQuizState,
     setCorrectAnswers,
-    setGameTime,
-    nextQuestions,
+    stopTimer,
+    setWorkTime,
+    quizTimer,
   } = useQuizData();
-  const { setTimer, useQuestionTime } = useConfigStore();
 
   // Menyimpan jawaban yang dipilih user (opsional, untuk UI highlight)
   const [option, setOption] = useState<string>("");
@@ -51,18 +49,6 @@ export function useQuizCardLogics() {
     const optionSelected = target.dataset.option;
     if (!optionSelected) return;
 
-    if (nextQuestions && useQuestionTime) {
-      setTimer(nextQuestions.timeLimitSeconds as number);
-    }
-
-    // Menambahkan waktu tersisa saat ini ke total akumulasi waktu menjawab
-    setGameTime((prev) => {
-      return {
-        ...prev,
-        accumulate: prev.accumulate + getAccumulateTime(prev),
-      };
-    });
-
     // Menentukan apakah jawaban benar
     const isCorrect = optionSelected.toLowerCase() === answer.toLowerCase();
     if (isCorrect) setCorrectAnswers((prev) => prev + 1);
@@ -73,8 +59,11 @@ export function useQuizCardLogics() {
     // Update status kuis (sudah dijawab & benar/tidak)
     setQuizState((prev) => ({ ...prev, isAnswered: true, isCorrect }));
 
+    // Tambah waktu mengerjakan
+    setWorkTime((prev) => [...prev, quizTimer.total - quizTimer.current]);
+
     // Menjeda timer setelah menjawab
-    setQuizState((prev) => ({ ...prev, isPaused: true }));
+    stopTimer();
   };
 
   return {

@@ -1,8 +1,5 @@
-export interface GameTime {
-  init: number;
-  accumulate: number;
+export interface GameTimer {
   current: number;
-  next: number;
-  rest: number;
-  distance?: number;
+  total: number;
+  isRunning: boolean;
 }

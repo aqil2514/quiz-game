@@ -7,24 +7,13 @@ import React, {
   useContext,
   useState,
   useEffect,
+  useRef,
 } from "react";
 import { defaultQuizState } from "./variables";
-import { GameTime } from "@/@types/time";
 import { useRouter } from "next/navigation";
 import { useConfigStore } from "@/store/config-store";
-
-const getGameTime = (time: number): GameTime => {
-  const maxValue = 100;
-  const distance = maxValue / time;
-  return {
-    accumulate: 0,
-    init: time,
-    next: time,
-    rest: 0,
-    distance,
-    current: time * distance,
-  };
-};
+import { GameTimer } from "@/@types/time";
+import { getAndRunQuizTimer } from "./utils";
 
 interface QuizContextState {
   questions: QuizQuestion[];
@@ -37,12 +26,16 @@ interface QuizContextState {
   correctAnswers: number;
   setCorrectAnswers: Dispatch<SetStateAction<number>>;
   nextQuestions: QuizQuestion;
-  setGameTime: Dispatch<SetStateAction<GameTime>>;
-  gameTime: GameTime;
   resetHandler: () => void;
   resumeHandler: () => void;
   skipHandler: () => void;
   exitHandler: () => void;
+  quizTimer: GameTimer;
+  setQuizTimer: Dispatch<SetStateAction<GameTimer>>;
+  startTimer: () => void;
+  stopTimer: () => void;
+  workTime: number[];
+  setWorkTime: Dispatch<SetStateAction<number[]>>;
 }
 
 const QuizContext = createContext<QuizContextState>({} as QuizContextState);
@@ -58,11 +51,14 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
   const [correctAnswers, setCorrectAnswers] = useState<number>(0);
   const [filteredQuestions, setFilteredQuestions] =
     useState<QuizQuestion[]>(questions);
+  const [quizTimer, setQuizTimer] = useState<GameTimer>({
+    current: Number(questions[currentQuiz].timeLimitSeconds),
+    total: Number(questions[currentQuiz].timeLimitSeconds),
+    isRunning: true,
+  });
+  const [workTime, setWorkTime] = useState<number[]>([]);
 
-  const { useQuestionTime, timer, setTimer } = useConfigStore();
-  const [gameTime, setGameTime] = useState<GameTime>(() =>
-    getGameTime(questions[0].timeLimitSeconds ?? 15)
-  );
+  const { useQuestionTime, setTimer } = useConfigStore();
 
   const router = useRouter();
   const nextQuestions = questions[currentQuiz + 1];
@@ -73,19 +69,15 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
     }
   }, [useQuestionTime, setTimer, questions]);
 
-  useEffect(() => {
-    if (timer) {
-      setGameTime(getGameTime(timer));
-    }
-  }, [timer]);
-
   const resetHandler = () => {
     setQuizState(defaultQuizState);
     setCorrectAnswers(0);
     setCurrentQuiz(0);
+    setWorkTime([]);
     if (useQuestionTime && questions[0].timeLimitSeconds) {
       setTimer(questions[0].timeLimitSeconds);
     }
+    setQuizTimer(getAndRunQuizTimer(questions[0]));
     router.refresh();
   };
 
@@ -100,10 +92,41 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
 
   const resumeHandler = () => {
     setQuizState((prev) => ({ ...prev, isPausedUser: false }));
+    setQuizTimer((prev) => ({ ...prev, isRunning: true }));
   };
 
   const exitHandler = () => {
     router.push("/");
+  };
+
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const startTimer = () => {
+    if (intervalRef.current) return;
+
+    intervalRef.current = setInterval(() => {
+      setQuizTimer((prev) => {
+        const next = prev.current - 1;
+
+        if (next <= 0) {
+          clearInterval(intervalRef.current!);
+          intervalRef.current = null;
+          return { ...prev, current: 0, isRunning: false };
+        }
+
+        return { ...prev, current: next };
+      });
+    }, 1000);
+
+    setQuizTimer((prev) => ({ ...prev, isRunning: true }));
+  };
+
+  const stopTimer = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    setQuizTimer((prev) => ({ ...prev, isRunning: false }));
   };
 
   const value: QuizContextState = {
@@ -117,12 +140,16 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
     filteredQuestions,
     setFilteredQuestions,
     nextQuestions,
-    gameTime,
-    setGameTime,
     resetHandler,
     resumeHandler,
     skipHandler,
     exitHandler,
+    quizTimer,
+    setQuizTimer,
+    startTimer,
+    stopTimer,
+    workTime,
+    setWorkTime,
   };
 
   return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;

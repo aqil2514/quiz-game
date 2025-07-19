@@ -4,12 +4,10 @@ import { useQuizCardLogics } from "../hooks/useQuizCardLogics";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { fadeUpVariants } from "@/lib/motionVariants";
-import { useConfigStore } from "@/store/config-store";
 
 export default function QuizCard() {
   const { clickHandler, question, currentQuiz, quizState, answer } =
     useQuizCardLogics();
-  const { timer } = useConfigStore();
 
   return (
     <motion.div
@@ -21,7 +19,7 @@ export default function QuizCard() {
       <Card className="bg-blue-200/50 border-none shadow-blue-100 shadow-md w-3/4">
         <CardHeader className="flex flex-wrap">
           <CardTitle>
-            Pertanyaan #{currentQuiz + 1} ({timer} Detik)
+            Pertanyaan #{currentQuiz + 1} ({question.timeLimitSeconds} Detik)
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">

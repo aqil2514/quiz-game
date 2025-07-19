@@ -4,10 +4,10 @@ import MainContainer from "../layouts/Container/MainContainer";
 import QuizCard from "../features/(game)/Quiz/components/QuizCard";
 import { QuizProvider } from "../features/(game)/Quiz/Provider";
 import Controller from "../features/(game)/Quiz/components/Controller";
-import Timer from "../features/(game)/Quiz/components/Timer";
 import ButtonControllers from "../features/(game)/Quiz/components/ButtonControllers";
 import { useHasHydrated } from "@/hooks/useHasHydrated";
 import Loading from "@/app/loading";
+import Timer from "../features/(game)/Quiz/components/Timer";
 
 interface QuizTemplateProps {
   questions: QuizQuestion[];
@@ -20,9 +20,11 @@ export default function QuizTemplate({ questions }: QuizTemplateProps) {
   return (
     <QuizProvider questions={questions}>
       <MainContainer className="flex flex-col justify-center items-center space-y-4">
-        <ButtonControllers />
+        <div className="flex justify-between w-3/4">
+          <ButtonControllers />
+          <Timer />
+        </div>
         <QuizCard />
-        <Timer />
 
         <Controller />
       </MainContainer>

@@ -6,11 +6,12 @@ import { Menu, RotateCcw } from "lucide-react";
 export default function ContinueControllerFinish() {
   const {
     score,
-    amountQuestion,
+    totalQuestions,
     correctAnswers,
-    gameTime,
     resetHandler,
     exitHandler,
+    duration,
+    timeQuestTotal,
   } = useControllerLogics();
   const isPerfect = score === 100;
   const isGood = score >= 70;
@@ -38,11 +39,13 @@ export default function ContinueControllerFinish() {
             </span>
           </p>
           <p>Total Soal:</p>
-          <p>{amountQuestion}</p>
+          <p>{totalQuestions}</p>
           <p>Jawaban Benar:</p>
           <p>{correctAnswers}</p>
           <p>Waktu Mengerjakan:</p>
-          <p>{gameTime.accumulate.toFixed()} detik</p>
+          <p>{duration} detik</p>
+          <p>Total Waktu Kuis:</p>
+          <p>{timeQuestTotal} detik</p>
         </div>
 
         <div className="flex gap-4 justify-center">

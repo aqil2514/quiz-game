@@ -1,4 +1,5 @@
 import { QuizState } from "@/@types/quiz";
+import { GameTimer } from "@/@types/time";
 
 export const defaultQuizState: QuizState = {
   isAnswered: false,
@@ -9,3 +10,8 @@ export const defaultQuizState: QuizState = {
   isConfig: false,
 };
 
+export const defaultQuizTimer:GameTimer = {
+    current: 0,
+    isRunning: false,
+    total: 0,
+  }
