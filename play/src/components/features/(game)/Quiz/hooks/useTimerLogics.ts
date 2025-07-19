@@ -49,13 +49,12 @@ export function useTimerLogics() {
           clearInterval(interval);
           return { ...prev, current: 0 };
         }
-        return { ...prev, current: prev.current - Number(gameTime.distance) };
+        return { ...prev, current: prev.current - Number(prev.distance) };
       });
     }, 1000);
 
     return () => clearInterval(interval);
   }, [
-    gameTime.distance,
     setGameTime,
     quizState.isPaused,
     quizState.isPausedUser,

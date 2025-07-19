@@ -16,3 +16,12 @@ export interface QuizState {
   isPausedUser: boolean;
   isConfig: boolean;
 }
+
+export interface QuizScore {
+  userId: string;
+  category: string;
+  score: number;
+  totalQuestions: number;
+  duration: number;
+  date: string;
+}

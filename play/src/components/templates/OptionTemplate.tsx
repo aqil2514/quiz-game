@@ -4,7 +4,7 @@ import Config from "../features/Option/components/Config";
 
 export default function OptionTemplate() {
   return (
-    <MainContainer className="flex items-center flex-col p-4 md:p-8 space-y-8">
+    <MainContainer className="flex items-center flex-col px-4 pt-20 md:px-8 md:pt-20 space-y-8">
       <h1 className="font-bold text-4xl text-white">Pengaturan</h1>
 
       <Config />

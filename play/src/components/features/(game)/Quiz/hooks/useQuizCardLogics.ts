@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuizData } from "../Provider";
 import { useConfigStore } from "@/store/config-store";
+import { getAccumulateTime } from "../utils";
 
 /**
  * Hook logika utama untuk menangani interaksi pengguna dengan kuis.
@@ -55,11 +56,12 @@ export function useQuizCardLogics() {
     }
 
     // Menambahkan waktu tersisa saat ini ke total akumulasi waktu menjawab
-    setGameTime((prev) => ({
-      ...prev,
-      accumulate:
-        prev.accumulate + prev.current / Number(prev.distance?.toFixed()),
-    }));
+    setGameTime((prev) => {
+      return {
+        ...prev,
+        accumulate: prev.accumulate + getAccumulateTime(prev),
+      };
+    });
 
     // Menentukan apakah jawaban benar
     const isCorrect = optionSelected.toLowerCase() === answer.toLowerCase();

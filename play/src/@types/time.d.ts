@@ -3,5 +3,6 @@ export interface GameTime {
   accumulate: number;
   current: number;
   next: number;
+  rest: number;
   distance?: number;
 }

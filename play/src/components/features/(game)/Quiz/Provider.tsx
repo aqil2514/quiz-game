@@ -20,6 +20,7 @@ const getGameTime = (time: number): GameTime => {
     accumulate: 0,
     init: time,
     next: time,
+    rest: 0,
     distance,
     current: time * distance,
   };

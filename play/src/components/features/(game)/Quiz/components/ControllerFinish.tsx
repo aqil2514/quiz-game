@@ -41,7 +41,7 @@ export default function ContinueControllerFinish() {
           <p>{amountQuestion}</p>
           <p>Jawaban Benar:</p>
           <p>{correctAnswers}</p>
-          <p>Sisa Waktu Mengerjakan:</p>
+          <p>Waktu Mengerjakan:</p>
           <p>{gameTime.accumulate.toFixed()} detik</p>
         </div>
 
