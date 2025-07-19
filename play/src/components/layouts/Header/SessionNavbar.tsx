@@ -9,6 +9,7 @@ import SessionAvatar from "./SessionAvatar";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
+import Link from "next/link";
 
 export default function SessionNavbar() {
   const session = useSession();
@@ -25,10 +26,17 @@ export default function SessionNavbar() {
             {user.email}
           </SheetTitle>
           <div className="flex justify-center items-center">
-            <Button size={"icon"} variant={"destructive"} onClick={() => signOut({redirectTo:"/?sonner-logout-success=true"})} >
+            <Button
+              size={"icon"}
+              variant={"destructive"}
+              onClick={() =>
+                signOut({ redirectTo: "/?sonner-logout-success=true" })
+              }
+            >
               <LogOut />
             </Button>
           </div>
+          <Link href={"/score"}>Score</Link>
         </SheetHeader>
       </SheetContent>
     </Sheet>

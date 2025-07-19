@@ -1,6 +1,8 @@
 import { useSession } from "next-auth/react";
 import { useQuizData } from "../Provider";
 import { getAndRunQuizTimer, getQuizScore } from "../utils";
+import { useEffect, useRef } from "react";
+import axios from "axios";
 
 /**
  * Hook logika utama untuk mengelola alur kuis dan kontrol navigasi soal.
@@ -34,6 +36,7 @@ export function useControllerLogics() {
     setQuizTimer,
     workTime,
   } = useQuizData();
+  const hasPosted = useRef<boolean>(false);
 
   // Jumlah total soal
 
@@ -63,9 +66,24 @@ export function useControllerLogics() {
   const quizScore = getQuizScore({
     correctAnswers,
     questions,
-    userId: session.data?.user.id,
+    userId: session.data?.user.userId,
     workTime,
   });
+
+  useEffect(() => {
+    if (!quizState.isFinished || hasPosted.current) return;
+
+    const postScore = async () => {
+      hasPosted.current = true;
+      try {
+        await axios.post("/api/quiz/score", quizScore);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    postScore();
+  }, [quizState.isFinished, quizScore]);
 
   return {
     clickHandler,

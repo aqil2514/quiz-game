@@ -18,6 +18,7 @@ export interface QuizState {
 }
 
 export interface QuizScore {
+  id: string;
   userId: string;
   category: string;
   score: number;

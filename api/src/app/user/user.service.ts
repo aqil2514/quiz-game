@@ -71,7 +71,7 @@ export class UserService {
   async getAllUsers() {
     const res = await this.userRef.get();
     const users: User[] = res.docs.map(
-      (doc) => ({ id: doc.id, ...doc.data() }) as User,
+      (doc) => ({ id: doc.id, userId: doc.id, ...doc.data() }) as User,
     );
     return users;
   }
@@ -82,6 +82,7 @@ export class UserService {
       (doc) =>
         ({
           id: doc.id,
+          userId: doc.id,
           ...doc.data(),
         }) as User,
     )[0];
@@ -97,6 +98,7 @@ export class UserService {
       (doc) =>
         ({
           id: doc.id,
+          userId: doc.id,
           ...doc.data(),
         }) as User,
     )[0];

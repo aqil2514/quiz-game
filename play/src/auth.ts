@@ -21,11 +21,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           profile
         );
 
+        console.log(`Data Form Auth`);
+        console.log(data);
+
         const user: User = {
           email: data.email,
           username: data.username,
           roles: data.roles,
           id: data.id,
+          userId: data.userId,
         };
         return { ...user };
       },
@@ -65,6 +69,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.id = user.id;
         token.username = user.username;
         token.email = user.email;
+        token.userId = user.userId;
       }
 
       return token;
@@ -78,6 +83,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           roles: token.roles as string[],
           email: token.email as string,
           username: token.username as string,
+          userId: token.userId as string,
         },
       };
     },

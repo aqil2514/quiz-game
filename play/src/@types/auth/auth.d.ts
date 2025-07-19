@@ -8,6 +8,7 @@ declare module "next-auth" {
 
   interface User {
     readonly id: string;
+    readonly userId: string;
     username: string;
     email: string;
     roles: string[];
