@@ -6,21 +6,22 @@ import { DataTableDefault } from "./default";
 
 type TableVariant = "default";
 
-interface Props<TData, TValue> {
+export interface DataTableContext<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
 interface DataTableProps<TData, TValue> {
-  props: Props<TData, TValue>;
+  context: DataTableContext<TData, TValue>;
   variants: TableVariant;
 }
 
 export function DataTable<TData, TValue>({
-  props,
+  context,
   variants = "default",
 }: DataTableProps<TData, TValue>) {
-  if (variants === "default") return <DataTableDefault props={props} />;
+  console.log(context)
+  if (variants === "default") return <DataTableDefault props={context} />;
 
   return null;
 }

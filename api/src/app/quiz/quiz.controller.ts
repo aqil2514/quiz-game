@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
 import { QuizQuestion, QuizScore } from './quiz.interface';
 import { QuizService } from './quiz.service';
 import { Request } from 'express';
@@ -19,9 +19,18 @@ export class QuizController {
     return await this.quizService.getUserScore(userId as string);
   }
 
-  @Post("/question")
-  async createNewQuestion(@Body() body:QuizQuestion){
+  @Post('/question')
+  async createNewQuestion(@Body() body: QuizQuestion) {
+    return await this.quizService.createNewQuestion(body);
+  }
 
-    return await this.quizService.createNewQuestion(body)
+  @Get('/all-categories')
+  async getAllCategories() {
+    return await this.quizService.getAllCategory();
+  }
+
+  @Get('/category/:category')
+  async getQuestionsByCategory(@Param() params: { category: string }) {
+    return await this.quizService.getQuestionsByCategory(params.category);
   }
 }

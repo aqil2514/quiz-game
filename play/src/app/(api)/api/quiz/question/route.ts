@@ -25,3 +25,24 @@ export async function POST(req: NextRequest) {
     }
   }
 }
+
+export async function GET(req: NextRequest) {
+  const { searchParams } = req.nextUrl;
+  const category = searchParams.get("category");
+  if (!category)
+    return NextResponse.json(
+      { message: "Kategori belum dipilih" },
+      { status: 400 }
+    );
+
+  try {
+    const { data } = await axios.get(
+      `${endpointServer}/quiz/category/${category}`
+    );
+
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ message: "Terjadi Kesalahan" }, { status: 500 });
+  }
+}

@@ -1,4 +1,6 @@
+import { QuizCategories } from "@/@types/quiz";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -8,8 +10,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -32,8 +36,9 @@ const formSchema = z
 
 export type QuestionFormSchema = z.infer<typeof formSchema>;
 
-interface QustionFormContent {
+export interface QustionFormContent {
   values?: QuestionFormSchema;
+  categoryList: QuizCategories[];
   onSubmit: (values: QuestionFormSchema) => void;
 }
 
@@ -42,13 +47,14 @@ interface QuestionFormProps {
 }
 
 export default function QuestionForm({ content }: QuestionFormProps) {
-  const { values, onSubmit } = content;
+  const { values, onSubmit, categoryList } = content;
+  const [isReset, setIsReset] = useState<boolean>(true);
   const defaultValues: QuestionFormSchema = values ?? {
     answer: "",
     category: "",
     explanation: "",
     id: "",
-    options: [],
+    options: ["", "", "", ""],
     questions: "",
     timeLimitSeconds: "0",
   };
@@ -59,6 +65,19 @@ export default function QuestionForm({ content }: QuestionFormProps) {
   });
 
   const isSubmitting = form.formState.isSubmitting;
+  const isSuccess = form.formState.isSubmitSuccessful;
+
+  useEffect(() => {
+    if (!isReset) return;
+    form.reset();
+
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      form.setFocus("category");
+    });
+  }, [isSuccess, form, isReset]);
+
+  const categoryName = categoryList.map((category) => category.name);
 
   return (
     <Form {...form}>
@@ -71,7 +90,12 @@ export default function QuestionForm({ content }: QuestionFormProps) {
             <FormItem>
               <FormLabel>Kategori</FormLabel>
               <FormControl>
-                <Input disabled={isSubmitting} placeholder="Contoh: Matematika" {...field} />
+                <Input
+                  disabled={isSubmitting}
+                  placeholder="Contoh: Matematika"
+                  list="category-list"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -86,7 +110,11 @@ export default function QuestionForm({ content }: QuestionFormProps) {
             <FormItem>
               <FormLabel>Pertanyaan</FormLabel>
               <FormControl>
-                <Textarea disabled={isSubmitting} placeholder="Tulis pertanyaannya di sini" {...field} />
+                <Textarea
+                  disabled={isSubmitting}
+                  placeholder="Tulis pertanyaannya di sini"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -104,7 +132,11 @@ export default function QuestionForm({ content }: QuestionFormProps) {
                 <FormItem>
                   <FormLabel>Opsi {label}</FormLabel>
                   <FormControl>
-                    <Input disabled={isSubmitting} placeholder={`Opsi ${label}`} {...field} />
+                    <Input
+                      disabled={isSubmitting}
+                      placeholder={`Opsi ${label}`}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -121,7 +153,8 @@ export default function QuestionForm({ content }: QuestionFormProps) {
             <FormItem>
               <FormLabel>Jawaban Benar</FormLabel>
               <FormControl>
-                <Input disabled={isSubmitting}
+                <Input
+                  disabled={isSubmitting}
                   placeholder="Salin salah satu opsi sebagai jawaban"
                   {...field}
                 />
@@ -139,7 +172,10 @@ export default function QuestionForm({ content }: QuestionFormProps) {
             <FormItem>
               <FormLabel>Penjelasan (opsional)</FormLabel>
               <FormControl>
-                <Textarea placeholder="Tulis penjelasan jika perlu" {...field} />
+                <Textarea
+                  placeholder="Tulis penjelasan jika perlu"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -154,18 +190,52 @@ export default function QuestionForm({ content }: QuestionFormProps) {
             <FormItem>
               <FormLabel>Waktu (detik)</FormLabel>
               <FormControl>
-                <Input disabled={isSubmitting} type="number" placeholder="Contoh: 30" {...field} />
+                <Input
+                  disabled={isSubmitting}
+                  type="number"
+                  placeholder="Contoh: 30"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        {/* Submit Button */}
-        <Button type="submit" className="w-full mt-4" disabled={isSubmitting}>
-          {isSubmitting ? "Memproses..." : values ? "Perbarui Soal" : "Buat Soal"}
-        </Button>
+        <div className="space-y-2">
+          <div className="flex gap-2">
+            <Checkbox
+              id="create-again-checkbox"
+              checked={isReset}
+              onClick={() => setIsReset(!isReset)}
+            />
+            <Label htmlFor="create-again-checkbox">Buat Lagi?</Label>
+          </div>
+          <div className="flex gap-2 items-center">
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting
+                ? "Memproses..."
+                : values
+                ? "Perbarui Soal"
+                : "Buat Soal"}
+            </Button>
+            <Button
+              type="button"
+              variant={"destructive"}
+              disabled={isSubmitting}
+              onClick={() => form.reset()}
+            >
+              Reset Form
+            </Button>
+          </div>
+        </div>
       </form>
+
+      <datalist id="category-list">
+        {categoryName.map((val) => (
+          <option value={val} key={val} />
+        ))}
+      </datalist>
     </Form>
-  )
+  );
 }

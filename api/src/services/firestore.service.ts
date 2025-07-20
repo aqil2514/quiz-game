@@ -24,6 +24,10 @@ export class FirestoreService {
     return this.db.collection('user');
   }
 
+  quizCategories() {
+    return this.db.collection('quiz-categories');
+  }
+
   quizScoreCollection() {
     return this.db.collection('quiz-score');
   }

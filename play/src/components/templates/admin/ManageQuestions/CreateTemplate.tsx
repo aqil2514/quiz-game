@@ -1,11 +1,24 @@
 "use client";
 
 import MainContainer from "@/components/layouts/Container/MainContainer";
-import QuestionForm from "@/components/features/(admin)/ManageQuestions/QuestionForm";
+import QuestionForm, {
+  QustionFormContent,
+} from "@/components/features/(admin)/ManageQuestions/QuestionForm";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { addQuestions } from "@/components/features/(admin)/ManageQuestions/utils/addQuestions";
+import { QuizCategories } from "@/@types/quiz";
 
-export default function ManageQuestionsCreateTemplate() {
+interface ManageQuestionsCreateTemplateProps {
+  categories: QuizCategories[];
+}
+
+export default function ManageQuestionsCreateTemplate({
+  categories,
+}: ManageQuestionsCreateTemplateProps) {
+  const content: QustionFormContent = {
+    onSubmit: async (values) => await addQuestions(values),
+    categoryList: categories,
+  };
   return (
     <MainContainer className="pb-8">
       <div className="max-w-2xl mx-auto">
@@ -16,13 +29,7 @@ export default function ManageQuestionsCreateTemplate() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <QuestionForm
-              content={{
-                async onSubmit(values) {
-                  return await addQuestions(values);
-                },
-              }}
-            />
+            <QuestionForm content={content} />
           </CardContent>
         </Card>
       </div>

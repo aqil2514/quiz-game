@@ -6,6 +6,7 @@ export function mapQuestionSchemaToQuizQuestion(
 ): QuizQuestion {
   return {
     ...raw,
+    id: undefined,
     // @ts-expect-error Ga dipakek. Jadi "question" yang dipakek
     questions: undefined,
     question: raw.questions,

@@ -1,3 +1,11 @@
+export interface QuizCategories {
+  readonly id?: string;
+  name: string;
+  description?: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
 export interface QuizQuestion {
   readonly id?: string;
   category: string;
