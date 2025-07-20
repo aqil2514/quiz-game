@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { FirestoreService } from '../../services/firestore.service';
-import { QuizScore } from './quiz.interface';
+import { QuizQuestion, QuizScore } from './quiz.interface';
 
 @Injectable()
 export class QuizService {
   constructor(private firestoreService: FirestoreService) {}
   private quizScoreRef = this.firestoreService.quizScoreCollection();
+  private quizQuestionRef = this.firestoreService.quisQuestionsCollection();
 
   async postUserScore(data: QuizScore) {
     await this.quizScoreRef.add(data);
@@ -16,5 +17,9 @@ export class QuizService {
     const score = res.docs.map((score) => ({ id: score.id, ...score.data() }));
 
     return { score };
+  }
+
+  async createNewQuestion(data: QuizQuestion) {
+    await this.quizQuestionRef.add(data);
   }
 }

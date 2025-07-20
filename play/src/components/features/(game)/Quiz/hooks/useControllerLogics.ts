@@ -73,6 +73,7 @@ export function useControllerLogics() {
   useEffect(() => {
     if (!quizState.isFinished || hasPosted.current) return;
 
+    // TODO : Nanti fix ini. Sering 2x hit api
     const postScore = async () => {
       hasPosted.current = true;
       try {

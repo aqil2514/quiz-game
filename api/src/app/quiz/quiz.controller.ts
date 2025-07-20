@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Req } from '@nestjs/common';
-import { QuizScore } from './quiz.interface';
+import { QuizQuestion, QuizScore } from './quiz.interface';
 import { QuizService } from './quiz.service';
 import { Request } from 'express';
 
@@ -17,5 +17,11 @@ export class QuizController {
     const { userId } = req.query;
 
     return await this.quizService.getUserScore(userId as string);
+  }
+
+  @Post("/question")
+  async createNewQuestion(@Body() body:QuizQuestion){
+
+    return await this.quizService.createNewQuestion(body)
   }
 }

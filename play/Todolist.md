@@ -20,13 +20,13 @@ Tujuan: Membuat aplikasi lebih dinamis
 ✅Simpan soal dalam file JSON berdasarkan kategori (misal data/math.json, data/language.json)
 ✅Load file soal berdasarkan kategori
 
-STEP 3: Tambahkan Auth (Login/Daftar)
+✅STEP 3: Tambahkan Auth (Login/Daftar)
 Tujuan: Mulai menyimpan skor per user
 
 🔧 Fitur Tambahan:
 ✅ Halaman Login / Register
 ✅ Skor disimpan ke backend (misalnya Supabase atau Firebase)
- Hanya user login yang bisa melihat riwayat
+✅ Hanya user login yang bisa melihat riwayat
 ⚙️ Teknologi:
 Auth.js (kalau pakai Next.js)
 Firebase Auth / Supabase Auth

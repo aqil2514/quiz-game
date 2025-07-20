@@ -1,5 +1,5 @@
 export interface QuizQuestion {
-  id: string;
+  readonly id?: string;
   category: string;
   question: string;
   options: string[];

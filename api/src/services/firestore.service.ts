@@ -27,4 +27,8 @@ export class FirestoreService {
   quizScoreCollection() {
     return this.db.collection('quiz-score');
   }
+
+  quisQuestionsCollection() {
+    return this.db.collection('quiz-questions');
+  }
 }
