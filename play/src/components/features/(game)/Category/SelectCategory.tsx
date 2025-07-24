@@ -1,3 +1,5 @@
+import { QuizCategories } from "@/@types/quiz";
+import { mapQuizCategoryToFilterOptions } from "@/components/molecules/select/mapToSelectFilter";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -6,15 +8,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { categoryList } from "@/data/categoryList";
 import { fadeUpVariants } from "@/lib/motionVariants";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function SelectCategory() {
+export default function SelectCategory({
+  categories,
+}: {
+  categories: QuizCategories[];
+}) {
   const [category, setCategory] = useState<string>("");
   const router = useRouter();
+  const categoryList = mapQuizCategoryToFilterOptions(categories);
 
   const playHandler = () => {
     router.push(`/quiz?category=${category}`);
@@ -33,8 +39,8 @@ export default function SelectCategory() {
         </SelectTrigger>
         <SelectContent>
           {categoryList.map((cat) => (
-            <SelectItem key={cat.id} value={cat.id}>
-              {cat.name}
+            <SelectItem key={cat.value} value={cat.value}>
+              {cat.label}
             </SelectItem>
           ))}
         </SelectContent>

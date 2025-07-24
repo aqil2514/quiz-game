@@ -19,7 +19,7 @@ export default function QuizTemplate({ questions }: QuizTemplateProps) {
   if (!hasHydrated) return <Loading />;
   return (
     <QuizProvider questions={questions}>
-      <MainContainer className="flex flex-col justify-center items-center space-y-4">
+      <MainContainer className="flex flex-col items-center space-y-4 pt-8">
         <div className="flex justify-between w-3/4">
           <ButtonControllers />
           <Timer />

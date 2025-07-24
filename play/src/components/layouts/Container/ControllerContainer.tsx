@@ -18,7 +18,7 @@ export default function ControllerContainer({
       animate={{ opacity: 1 }}
       transition={{ duration: 0.2 }}
       className={cn(
-        "w-screen h-screen bg-black/50 absolute flex justify-center items-center",
+        "w-screen h-screen bg-black/50 absolute flex justify-center items-center top-0 left-0",
         className
       )}
       {...props}

@@ -1,4 +1,4 @@
- ROADMAP — Step-by-Step Pengembangan Aplikasi Kuis
+ROADMAP — Step-by-Step Pengembangan Aplikasi Kuis
 ✅ STEP 1: Buat versi dasar (Frontend Only, tanpa backend)
 Tujuan: Punya kuis yang bisa jalan dari soal statis
 
@@ -39,6 +39,7 @@ Tujuan: Tambah/edit soal lewat UI
 ✅ Halaman untuk tambah/edit/hapus soal
 ✅ Upload soal per kategori
 ✅ Validasi input soal
+Quiz mulai menggunakan data soal yang dari database
 📁 Struktur Tambahan:
 ⚙️ Backend:
 ✅ Buat API endpoint (REST atau Supabase RPC) untuk CRUD soal

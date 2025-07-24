@@ -19,6 +19,7 @@ export default function ManageQuestionsCreateTemplate({
     onSubmit: async (values) => await addQuestions(values),
     categoryList: categories,
   };
+  
   return (
     <MainContainer className="pb-8">
       <div className="max-w-2xl mx-auto">

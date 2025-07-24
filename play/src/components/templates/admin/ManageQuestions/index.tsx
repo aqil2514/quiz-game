@@ -18,7 +18,7 @@ export default function AdminManageQuestionsTemplate({
     useAdminManageQuestionLogics(categories);
 
   return (
-    <MainContainer>
+    <MainContainer className="pb-8">
       <div>Header</div>
       <AdminPageHeader context={adminPageHaderContext} />
       <DataTable
