@@ -35,14 +35,14 @@ STEP 4: Buat Admin Panel
 Tujuan: Tambah/edit soal lewat UI
 
 🔧 Fitur Tambahan:
-Role-based access (admin / user)
-Halaman untuk tambah/edit/hapus soal
-Upload soal per kategori
-Validasi input soal
+✅ Role-based access (admin / user)
+✅ Halaman untuk tambah/edit/hapus soal
+✅ Upload soal per kategori
+✅ Validasi input soal
 📁 Struktur Tambahan:
 ⚙️ Backend:
-Buat API endpoint (REST atau Supabase RPC) untuk CRUD soal
-Gunakan database untuk simpan soal (PostgreSQL/Firebase)
+✅ Buat API endpoint (REST atau Supabase RPC) untuk CRUD soal
+✅ Gunakan database untuk simpan soal (PostgreSQL/Firebase)
 
 STEP 5: Leaderboard & Statistik
 Tujuan: Menarik user untuk bersaing

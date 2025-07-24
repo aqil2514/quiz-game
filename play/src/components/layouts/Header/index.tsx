@@ -4,9 +4,15 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import NoSessionNavbar from "./NoSessionNavbar";
 import SessionNavbar from "./SessionNavbar";
+import { useHasHydrated } from "@/hooks/useHasHydrated";
+import Loading from "@/app/loading";
 
 export default function Header() {
   const session = useSession();
+  const hasHydrated = useHasHydrated();
+
+  if(!hasHydrated) return <Loading />
+  
   return (
     <header className="w-full px-4 py-3 border-b flex justify-between items-center bg-blue-800 border-none fixed top-0 left-0 z-50">
       <Link href="/" className="text-xl font-bold text-yellow-500">

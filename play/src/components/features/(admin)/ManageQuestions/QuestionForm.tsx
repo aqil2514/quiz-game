@@ -15,54 +15,41 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import z from "zod";
+import { formSchema, QuestionFormSchema } from "./variables/schema";
+import { questionFormDefaultValue } from "./variables/defaultValues";
+import { useRouter } from "next/navigation";
 
-const formSchema = z
-  .object({
-    id: z.string().optional(),
-    category: z.string().min(1, { error: "Kategori soal wajib diisi" }),
-    questions: z.string().min(1, { error: "Pertanyaan wajib diisi" }),
-    options: z
-      .array(z.string().min(1, { error: "Opsi tidak boleh kosong" }))
-      .length(4, { error: "Harus ada tepat 4 opsi jawaban" }),
-    answer: z.string().min(1, { error: "Jawaban wajib diisi" }),
-    explanation: z.string().optional(),
-    timeLimitSeconds: z.string().min(1, { error: "Waktu soal wajib diisi" }),
-  })
-  .refine((data) => data.options.includes(data.answer), {
-    message: "Jawaban harus ada di dalam opsi",
-    path: ["answer"],
-  });
 
-export type QuestionFormSchema = z.infer<typeof formSchema>;
-
-export interface QustionFormContent {
+export interface QustionFormContext {
   values?: QuestionFormSchema;
   categoryList: QuizCategories[];
   onSubmit: (values: QuestionFormSchema) => void;
 }
 
 interface QuestionFormProps {
-  content: QustionFormContent;
+  context: QustionFormContext;
 }
 
-export default function QuestionForm({ content }: QuestionFormProps) {
-  const { values, onSubmit, categoryList } = content;
+export default function QuestionForm({ context }: QuestionFormProps) {
+  const { values, onSubmit, categoryList } = context;
   const [isReset, setIsReset] = useState<boolean>(true);
-  const defaultValues: QuestionFormSchema = values ?? {
-    answer: "",
-    category: "",
-    explanation: "",
-    id: "",
-    options: ["", "", "", ""],
-    questions: "",
-    timeLimitSeconds: "0",
-  };
+  const router = useRouter();
+  const defaultValues: QuestionFormSchema = values ?? questionFormDefaultValue;
 
   const form = useForm<QuestionFormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues,
   });
+
+  const submitHandler = form.handleSubmit(async (values) => {
+  try {
+    await onSubmit(values);
+    router.refresh();
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 
   const isSubmitting = form.formState.isSubmitting;
   const isSuccess = form.formState.isSubmitSuccessful;
@@ -81,7 +68,7 @@ export default function QuestionForm({ content }: QuestionFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={submitHandler} className="space-y-6">
         {/* Kategori */}
         <FormField
           control={form.control}
@@ -105,7 +92,7 @@ export default function QuestionForm({ content }: QuestionFormProps) {
         {/* Pertanyaan */}
         <FormField
           control={form.control}
-          name="questions"
+          name="question"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Pertanyaan</FormLabel>
@@ -203,14 +190,16 @@ export default function QuestionForm({ content }: QuestionFormProps) {
         />
 
         <div className="space-y-2">
-          <div className="flex gap-2">
-            <Checkbox
-              id="create-again-checkbox"
-              checked={isReset}
-              onClick={() => setIsReset(!isReset)}
-            />
-            <Label htmlFor="create-again-checkbox">Buat Lagi?</Label>
-          </div>
+          {!values && (
+            <div className="flex gap-2">
+              <Checkbox
+                id="create-again-checkbox"
+                checked={isReset}
+                onClick={() => setIsReset(!isReset)}
+              />
+              <Label htmlFor="create-again-checkbox">Buat Lagi?</Label>
+            </div>
+          )}
           <div className="flex gap-2 items-center">
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting

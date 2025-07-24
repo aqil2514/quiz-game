@@ -29,6 +29,7 @@ export function getQuizScore(params: GetQuizScoreParams): QuizScore {
     .reduce((acc, curr) => acc + curr, 0);
 
   const result: QuizScore = {
+    id: "",
     category: questions[0].category,
     date: new Date().toISOString(),
     duration,

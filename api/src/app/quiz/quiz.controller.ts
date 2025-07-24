@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  Req,
+} from '@nestjs/common';
 import { QuizQuestion, QuizScore } from './quiz.interface';
 import { QuizService } from './quiz.service';
 import { Request } from 'express';
@@ -19,9 +29,28 @@ export class QuizController {
     return await this.quizService.getUserScore(userId as string);
   }
 
+  @Get('/question/:id')
+  async getQuestionById(@Param() params: { id: string }) {
+    const { id } = params;
+
+    return await this.quizService.getQuestionById(id);
+  }
+
   @Post('/question')
   async createNewQuestion(@Body() body: QuizQuestion) {
     return await this.quizService.createNewQuestion(body);
+  }
+
+  @Put('/question')
+  async editQuestion(@Body() body: QuizQuestion) {
+    return await this.quizService.editQuizQuestion(body);
+  }
+
+  @Delete('/question')
+  async deleteQuestion(@Query() query: { id: string }) {
+    const { id } = query;
+
+    return await this.quizService.deleteQuizQuestion(id);
   }
 
   @Get('/all-categories')

@@ -1,23 +1,31 @@
 "use client";
 
-import MainContainer from "@/components/layouts/Container/MainContainer";
+import { QuizCategories, QuizQuestion } from "@/@types/quiz";
 import QuestionForm, {
   QustionFormContext,
 } from "@/components/features/(admin)/ManageQuestions/QuestionForm";
+import { editQuestions } from "@/components/features/(admin)/ManageQuestions/utils/editQuestions";
+import MainContainer from "@/components/layouts/Container/MainContainer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { addQuestions } from "@/components/features/(admin)/ManageQuestions/utils/addQuestions";
-import { QuizCategories } from "@/@types/quiz";
 
-interface ManageQuestionsCreateTemplateProps {
+interface EditQuestionTemplateProps {
+  question: QuizQuestion;
   categories: QuizCategories[];
 }
 
-export default function ManageQuestionsCreateTemplate({
+export default function EditQuestionTemplate({
   categories,
-}: ManageQuestionsCreateTemplateProps) {
+  question,
+}: EditQuestionTemplateProps) {
   const context: QustionFormContext = {
-    onSubmit: async (values) => await addQuestions(values),
     categoryList: categories,
+    values: {
+      ...question,
+      timeLimitSeconds: String(question.timeLimitSeconds),
+    },
+    async onSubmit(values) {
+      await editQuestions(values)
+    },
   };
   return (
     <MainContainer className="pb-8">
@@ -25,7 +33,7 @@ export default function ManageQuestionsCreateTemplate({
         <Card>
           <CardHeader>
             <CardTitle className="text-2xl font-semibold">
-              Buat Soal Baru
+              Edit Soal
             </CardTitle>
           </CardHeader>
           <CardContent>

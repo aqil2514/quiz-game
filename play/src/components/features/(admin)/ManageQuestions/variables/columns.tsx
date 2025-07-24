@@ -1,9 +1,32 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
-import { Pencil, Trash2 } from "lucide-react";
 import { QuizQuestion } from "@/@types/quiz";
+import DropdownAdmin, {
+  DropdownAdminContext,
+} from "@/components/molecules/dropdown";
+import { deleteQuestion } from "../utils/deleteQuestions";
 
 export const quizColumns: ColumnDef<QuizQuestion>[] = [
+  {
+    accessorKey: "actions",
+    header: "#",
+    cell: ({ row }) => {
+      const context: DropdownAdminContext = {
+        label: `Soal Nomor ${row.index + 1}`,
+        editLink: `/admin/manage-questions/edit/${row.original.id}`,
+        dataSummary: [
+          {
+            label: "Soal",
+            value: row.original.question,
+          },
+        ],
+        async onConfirm() {
+          return deleteQuestion(row.original.id as string)
+        },
+      };
+
+      return <DropdownAdmin context={context} />;
+    },
+  },
   {
     header: "No",
     cell: ({ row }) => row.index + 1,
@@ -23,7 +46,10 @@ export const quizColumns: ColumnDef<QuizQuestion>[] = [
       <ul className="text-sm space-y-1">
         {row.original.options.map((opt, i) => (
           <li key={i}>
-            <span className="font-semibold">{String.fromCharCode(65 + i)}.</span> {opt}
+            <span className="font-semibold">
+              {String.fromCharCode(65 + i)}.
+            </span>{" "}
+            {opt}
           </li>
         ))}
       </ul>
@@ -42,39 +68,5 @@ export const quizColumns: ColumnDef<QuizQuestion>[] = [
     accessorKey: "timeLimitSeconds",
     header: "Batas Waktu",
     cell: ({ row }) => <>{row.original.timeLimitSeconds}s</>,
-  },
-  {
-    id: "actions",
-    header: "Aksi",
-    cell: ({ row }) => {
-      const id = row.original.id;
-      return (
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              // navigasi edit
-              window.location.href = `/admin/manage-questions/${id}`;
-            }}
-          >
-            <Pencil className="w-4 h-4" />
-          </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => {
-              // konfirmasi & delete
-              if (confirm("Yakin ingin menghapus soal ini?")) {
-                // panggil fungsi hapus
-              }
-            }}
-          >
-            <Trash2 className="w-4 h-4" />
-          </Button>
-        </div>
-      );
-    },
-    size: 100,
   },
 ];

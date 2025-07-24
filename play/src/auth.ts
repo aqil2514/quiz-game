@@ -21,9 +21,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           profile
         );
 
-        console.log(`Data Form Auth`);
-        console.log(data);
-
         const user: User = {
           email: data.email,
           username: data.username,

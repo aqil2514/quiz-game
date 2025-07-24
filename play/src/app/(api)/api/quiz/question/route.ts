@@ -1,5 +1,5 @@
-import { QuestionFormSchema } from "@/components/features/(admin)/ManageQuestions/QuestionForm";
-import { mapQuestionSchemaToQuizQuestion } from "@/lib/map/mapQuestionSchemaToQuizQuestion";
+import { QuestionFormSchema } from "@/components/features/(admin)/ManageQuestions/variables/schema";
+import { mapQuestionSchemaToQuizQuestion } from "@/lib/map/question";
 import { endpointServer } from "@/lib/variables/endpoint";
 import axios, { isAxiosError } from "axios";
 import { NextRequest, NextResponse } from "next/server";
@@ -45,4 +45,40 @@ export async function GET(req: NextRequest) {
     console.error(error);
     return NextResponse.json({ message: "Terjadi Kesalahan" }, { status: 500 });
   }
+}
+
+export async function DELETE(req: NextRequest) {
+  const { searchParams } = req.nextUrl;
+  const id = searchParams.get("questionId");
+  if (!id) throw new Error("ID tidak ditemukan");
+
+  try {
+    const { data } = await axios.delete(`${endpointServer}/quiz/question`, {
+      params: { id },
+    });
+
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return NextResponse.json({ message: "ok" });
+}
+
+export async function PUT(req: NextRequest) {
+  const raw = await req.json();
+  const data = {
+    ...raw,
+    timeLimitSeconds: Number(raw.timeLimitSeconds),
+  };
+
+  try {
+    await axios.put(`${endpointServer}/quiz/question`, data);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+
+  return NextResponse.json({ message: "ok" }, { status: 200 });
 }

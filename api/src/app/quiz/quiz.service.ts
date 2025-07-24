@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { FirestoreService } from '../../services/firestore.service';
 import { QuizCategories, QuizQuestion, QuizScore } from './quiz.interface';
 
 @Injectable()
 export class QuizService {
   constructor(private firestoreService: FirestoreService) {}
+  private logger = new Logger(QuizService.name);
   private quizScoreRef = this.firestoreService.quizScoreCollection();
   private quizQuestionRef = this.firestoreService.quisQuestionsCollection();
   private quizCategoriesRef = this.firestoreService.quizCategories();
@@ -27,15 +28,13 @@ export class QuizService {
     } as QuizCategories;
   }
 
-  async postUserScore(data: QuizScore) {
-    await this.quizScoreRef.add(data);
-  }
-
-  async getUserScore(userId: string) {
-    const res = await this.quizScoreRef.where('userId', '==', userId).get();
-    const score = res.docs.map((score) => ({ id: score.id, ...score.data() }));
-
-    return { score };
+  async deleteQuizQuestion(questId: string) {
+    try {
+      await this.quizQuestionRef.doc(questId).delete();
+    } catch (error) {
+      this.logger.error(`Gagal hapus soal`, error.stack);
+      throw error;
+    }
   }
 
   async createNewQuestion(data: QuizQuestion) {
@@ -50,6 +49,26 @@ export class QuizService {
     }
 
     await this.quizQuestionRef.add(data);
+  }
+
+  async editQuizQuestion(data: QuizQuestion) {
+    try {
+      await this.quizQuestionRef.doc(data.id).update({ ...data });
+    } catch (error) {
+      this.logger.error('Terjadi error saat update data', error.stack);
+      throw error;
+    }
+  }
+
+  async postUserScore(data: QuizScore) {
+    await this.quizScoreRef.add(data);
+  }
+
+  async getUserScore(userId: string) {
+    const res = await this.quizScoreRef.where('userId', '==', userId).get();
+    const score = res.docs.map((score) => ({ id: score.id, ...score.data() }));
+
+    return { score };
   }
 
   async getAllCategory() {
@@ -70,5 +89,21 @@ export class QuizService {
     );
 
     return questions;
+  }
+
+  async getQuestionById(id: string) {
+    try {
+      const snapshot = await this.quizQuestionRef.doc(id).get();
+      const question: QuizQuestion = {
+        id: snapshot.id,
+        ...(snapshot.data() as QuizQuestion),
+      };
+      return question;
+    } catch (error) {
+      this.logger.error(
+        'Terjadi kesalahan saat ambil data pertanyaan',
+        error.stack,
+      );
+    }
   }
 }
