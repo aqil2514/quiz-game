@@ -9,6 +9,6 @@ export const getAllCategories = async () => {
     return data as QuizCategories[]
   } catch (error) {
     console.error(error)
-    throw error
+    return []
   }
 }
