@@ -36,6 +36,13 @@ export class QuizController {
     return await this.quizService.getQuestionById(id);
   }
 
+  @Get('/question/category/:category')
+  async getQuestionsByCategory(@Param() params: { category: string }) {
+    if (params.category === 'all')
+      return await this.quizService.getAllQuestions();
+    return await this.quizService.getQuestionsByCategory(params.category);
+  }
+
   @Post('/question')
   async createNewQuestion(@Body() body: QuizQuestion) {
     return await this.quizService.createNewQuestion(body);
@@ -58,8 +65,5 @@ export class QuizController {
     return await this.quizService.getAllCategory();
   }
 
-  @Get('/category/:category')
-  async getQuestionsByCategory(@Param() params: { category: string }) {
-    return await this.quizService.getQuestionsByCategory(params.category);
-  }
+  
 }

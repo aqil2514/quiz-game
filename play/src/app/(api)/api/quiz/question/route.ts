@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const { data } = await axios.get(
-      `${endpointServer}/quiz/category/${category}`
+      `${endpointServer}/quiz/question/category/${category}`
     );
 
     return NextResponse.json(data);

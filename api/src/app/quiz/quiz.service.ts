@@ -80,6 +80,15 @@ export class QuizService {
     return categories;
   }
 
+  async getAllQuestions() {
+    const snapshot = await this.quizQuestionRef.get();
+    const questions = snapshot.docs.map(
+      (doc) => ({ id: doc.id, ...doc.data() }) as QuizQuestion,
+    );
+
+    return questions;
+  }
+
   async getQuestionsByCategory(categoryName: string) {
     const snapshot = await this.quizQuestionRef
       .where('category', '==', categoryName)
