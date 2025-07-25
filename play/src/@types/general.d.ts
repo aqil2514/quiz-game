@@ -1,3 +1,4 @@
+import { LucideIcon } from "lucide-react";
 import { IconType } from "react-icons/lib";
 
 export interface ValueLabel {
@@ -6,5 +7,5 @@ export interface ValueLabel {
 }
 
 export interface ValueLabelWithIcon extends ValueLabel {
-  icon: IconType;
+  icon: IconType | LucideIcon;
 }

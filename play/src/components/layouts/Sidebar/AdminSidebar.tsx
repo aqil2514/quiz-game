@@ -32,7 +32,9 @@ export default function AdminSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel>Kelola Soal</SidebarGroupLabel>
           <SidebarGroupAction title="Add Project">
+            <Link href={"/admin/manage-questions/create"}>
             <Plus /> <span className="sr-only">Tambah Soal</span>
+            </Link>
           </SidebarGroupAction>
           <SidebarGroupContent>
             {questionGroup.map((q) => (

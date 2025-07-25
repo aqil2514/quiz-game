@@ -5,11 +5,12 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { GoSidebarCollapse, GoSidebarExpand } from "react-icons/go";
+import AdminDropdown from "./Dropdrown";
 
 export default function AdminHeader() {
   const { toggleSidebar, open } = useSidebar();
   return (
-    <header className="w-full px-4 py-3 border-b bg-gray-900 text-white">
+    <header className="w-full px-4 py-3 border-b bg-gray-900 text-white flex justify-between">
       <div className="flex gap-2">
         <Button
           size={"icon"}
@@ -25,6 +26,7 @@ export default function AdminHeader() {
           <div className="text-xl font-bold text-yellow-400">Admin Panel</div>
         </Link>
       </div>
+      <AdminDropdown />
     </header>
   );
 }
