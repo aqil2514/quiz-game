@@ -2,7 +2,6 @@ import { QuizCategories } from "@/@types/quiz";
 import axios from "axios";
 import { endpointServer } from "../variables/endpoint";
 
-// TODO :INI di production bermasalah
 export const getAllCategories = async () => {
   try {
     const { data } = await axios.get(`${endpointServer}/quiz/all-categories`);
