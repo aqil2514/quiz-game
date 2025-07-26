@@ -1,11 +1,16 @@
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import { useConfigStore } from "@/store/config-store";
 import { TimerIcon } from "lucide-react";
+import { useConfigData } from "../provider";
 
 export default function ConfigTimer() {
-  const { timer, setTimer, useQuestionTime, setUseQuestionTime } = useConfigStore();
+  const {
+    isUseQuestionTime,
+    setIsUseQuesTionTime,
+    timerConfig,
+    setTimerConfig,
+  } = useConfigData();
 
   return (
     <div className="space-y-4">
@@ -16,18 +21,23 @@ export default function ConfigTimer() {
 
       <div className="flex items-center justify-between">
         <Label className="text-gray-200">Gunakan waktu dari soal</Label>
-        <Switch checked={useQuestionTime} onCheckedChange={setUseQuestionTime} />
+        <Switch
+          checked={isUseQuestionTime}
+          onCheckedChange={() => setIsUseQuesTionTime(!isUseQuestionTime)}
+        />
       </div>
 
-      {!useQuestionTime && (
+      {!isUseQuestionTime && (
         <div className="space-y-2">
-          <Label className="text-white">Batas Waktu Soal ({timer} Detik)</Label>
+          <Label className="text-white">
+            Batas Waktu Soal ({timerConfig} Detik)
+          </Label>
           <Slider
-            value={[timer]}
+            value={[timerConfig]}
             min={5}
             max={60}
             step={5}
-            onValueChange={([val]) => setTimer(val)}
+            onValueChange={([val]) => setTimerConfig(val)}
           />
         </div>
       )}

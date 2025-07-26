@@ -3,7 +3,10 @@ import { motion } from "framer-motion";
 import ConfigSound from "./ConfigSound";
 import ConfigTimer from "./ConfigTimer";
 import { useRouter } from "next/navigation";
-import { PlayIcon, ArrowLeftIcon, RefreshCcw, X } from "lucide-react";
+import { ArrowLeftIcon, RefreshCcw, X } from "lucide-react";
+import { toast } from "sonner";
+import { FaSave } from "react-icons/fa";
+import { useConfigData } from "../provider";
 
 interface ConfigProps {
   isInGame?: boolean;
@@ -15,6 +18,7 @@ export default function Config({
   closeHandler,
 }: ConfigProps) {
   const router = useRouter();
+  const { saveConfig } = useConfigData();
 
   return (
     <motion.div
@@ -53,19 +57,22 @@ export default function Config({
           whileTap={{ scale: 0.95 }}
           onClick={() => {
             if (isInGame) {
+              saveConfig();
               location.reload();
               return;
             }
-            router.push("/quiz");
+            saveConfig();
+            toast.success("Perubahan disimpan");
+            router.push("/");
           }}
           className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition"
         >
           {isInGame ? (
             <RefreshCcw className="w-5 h-5" />
           ) : (
-            <PlayIcon className="w-5 h-5" />
+            <FaSave className="w-5 h-5" />
           )}
-          {isInGame ? "Mulai Ulang" : "Mulai Kuis"}
+          {isInGame ? "Simpan & Restart" : "Simpan"}
         </motion.button>
       </div>
     </motion.div>

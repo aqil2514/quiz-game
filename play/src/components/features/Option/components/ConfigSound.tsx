@@ -1,11 +1,11 @@
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { useConfigStore } from "@/store/config-store";
 import { Volume2Icon } from "lucide-react";
+import { useConfigData } from "../provider";
 
 export default function ConfigSound() {
-  const { setSound, sound } = useConfigStore();
-  
+  const { isSounded, setIsSounded } = useConfigData();
+
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-3">
@@ -16,8 +16,8 @@ export default function ConfigSound() {
       </div>
       <Switch
         id="sound"
-        checked={sound}
-        onCheckedChange={() => setSound(!sound)}
+        checked={isSounded}
+        onCheckedChange={() => setIsSounded(!isSounded)}
       />
     </div>
   );

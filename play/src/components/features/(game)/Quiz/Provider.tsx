@@ -6,7 +6,7 @@ import React, {
   SetStateAction,
   useContext,
   useState,
-  useEffect,
+  useMemo,
 } from "react";
 import { defaultQuizState } from "./variables";
 import { useRouter } from "next/navigation";
@@ -42,44 +42,45 @@ interface QuizProviderProps {
 }
 
 export function QuizProvider({ children, questions }: QuizProviderProps) {
+  const { useQuestionTime, timer: configTimer } = useConfigStore();
+
   const [currentQuiz, setCurrentQuiz] = useState<number>(0);
   const [quizState, setQuizState] = useState<QuizState>(defaultQuizState);
   const [correctAnswers, setCorrectAnswers] = useState<number>(0);
   const [filteredQuestions, setFilteredQuestions] =
     useState<QuizQuestion[]>(questions);
 
-  const time = new Date();
-  time.setSeconds(time.getSeconds() + questions[currentQuiz].timeLimitSeconds);
+  const time = useMemo(() => {
+    const time = new Date();
+    if (useQuestionTime) {
+      time.setSeconds(
+        time.getSeconds() + questions[currentQuiz].timeLimitSeconds
+      );
+    } else {
+      time.setSeconds(time.getSeconds() + configTimer);
+    }
+
+    return time;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [useQuestionTime]);
 
   const stopwatch = useStopwatch();
   const timer = useTimer({ expiryTimestamp: time });
 
-  const { useQuestionTime, setTimer } = useConfigStore();
-
   const router = useRouter();
   const nextQuestions = questions[currentQuiz + 1];
-
-  useEffect(() => {
-    if (useQuestionTime && questions[0].timeLimitSeconds) {
-      setTimer(questions[0].timeLimitSeconds);
-    }
-  }, [useQuestionTime, setTimer, questions]);
 
   const resetHandler = () => {
     setQuizState(defaultQuizState);
     setCorrectAnswers(0);
     setCurrentQuiz(0);
-    if (useQuestionTime && questions[0].timeLimitSeconds) {
-      setTimer(questions[0].timeLimitSeconds);
-    }
+    timer.restart(time)
     router.refresh();
   };
 
   const skipHandler = () => {
     if (!nextQuestions) return;
-    if (useQuestionTime && nextQuestions.timeLimitSeconds) {
-      setTimer(nextQuestions.timeLimitSeconds);
-    }
+    timer.restart(time);
     setCurrentQuiz((prev) => prev + 1);
     setQuizState((prev) => ({ ...prev, isPausedUser: false }));
   };
@@ -93,7 +94,6 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
   const exitHandler = () => {
     router.push("/");
   };
-
 
   const value: QuizContextState = {
     stopwatch,
