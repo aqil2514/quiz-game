@@ -15,6 +15,8 @@ interface ConfigContextState {
   setIsUseQuesTionTime: Dispatch<SetStateAction<boolean>>;
   timerConfig: number;
   setTimerConfig: Dispatch<SetStateAction<number>>;
+  totalQuiz: number;
+  setTotalQuiz: Dispatch<SetStateAction<number>>;
   saveConfig: () => void;
 }
 
@@ -35,6 +37,8 @@ export default function ConfigProvider({ children }: ConfigProviderProps) {
     setSound,
     setTimer,
     setUseQuestionTime,
+    setTotalQuestion,
+    totalQuestion
   } = useConfigStore();
 
   //   Config Options
@@ -42,12 +46,14 @@ export default function ConfigProvider({ children }: ConfigProviderProps) {
   const [isUseQuestionTime, setIsUseQuesTionTime] =
     useState<boolean>(useQuestionTime);
   const [timerConfig, setTimerConfig] = useState<number>(timer);
+  const [totalQuiz, setTotalQuiz] = useState<number>(totalQuestion);
 
   //   Config Action
   const saveConfig = () => {
     setSound(isSounded);
     setTimer(timerConfig);
     setUseQuestionTime(isUseQuestionTime);
+    setTotalQuestion(totalQuiz)
   };
 
   const value: ConfigContextState = {
@@ -58,6 +64,7 @@ export default function ConfigProvider({ children }: ConfigProviderProps) {
     setTimerConfig,
     timerConfig,
     saveConfig,
+    setTotalQuiz,totalQuiz
   };
   return (
     <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>

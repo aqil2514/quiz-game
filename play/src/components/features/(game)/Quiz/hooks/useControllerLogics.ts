@@ -29,7 +29,7 @@ export function useControllerLogics() {
     currentQuiz,
     setQuizState,
     correctAnswers,
-    questions,
+    filteredQuestions,
     resetHandler,
     nextQuestions,
     exitHandler,
@@ -62,11 +62,11 @@ export function useControllerLogics() {
     stopwatch.start();
   };
 
-  const current = questions[currentQuiz];
+  const current = filteredQuestions[currentQuiz];
 
   const quizScore = getQuizScore({
     correctAnswers,
-    questions,
+    questions:filteredQuestions,
     userId: session.data?.user.userId,
     stopwatch
   });

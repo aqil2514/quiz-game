@@ -10,6 +10,9 @@ export interface ConfigState {
 
   useQuestionTime: boolean;
   setUseQuestionTime: (value: boolean) => void;
+
+  totalQuestion: number;
+  setTotalQuestion: (total: number) => void;
 }
 
 export const useConfigStore = create<ConfigState>()(
@@ -18,9 +21,11 @@ export const useConfigStore = create<ConfigState>()(
       sound: true,
       timer: 15,
       useQuestionTime: true,
+      totalQuestion: 10,
       setSound: (enabled) => set({ sound: enabled }),
       setTimer: (time) => set({ timer: time }),
       setUseQuestionTime: (value) => set({ useQuestionTime: value }),
+      setTotalQuestion: (question) => set({ totalQuestion: question }),
     }),
     {
       name: "quiz-config",

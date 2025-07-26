@@ -1,4 +1,4 @@
-import ConfigProvider from "@/components/features/Option/provider";
+import ConfigProvider from "@/components/features/(game)/Option/provider";
 import React from "react";
 
 export default function GameLayout({

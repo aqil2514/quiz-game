@@ -18,7 +18,7 @@ import { useQuizData } from "../Provider";
 export function useQuizCardLogics() {
   // Mengambil data dan setter dari konteks kuis
   const {
-    questions,
+    filteredQuestions,
     currentQuiz,
     setCurrentQuiz,
     quizState,
@@ -32,8 +32,8 @@ export function useQuizCardLogics() {
   const [option, setOption] = useState<string>("");
 
   // Soal dan jawaban saat ini berdasarkan currentQuiz
-  const question = questions[currentQuiz];
-  const answer = questions[currentQuiz].answer;
+  const question = filteredQuestions[currentQuiz];
+  const answer = filteredQuestions[currentQuiz].answer;
 
   /**
    * Fungsi yang dijalankan saat user memilih salah satu opsi jawaban.

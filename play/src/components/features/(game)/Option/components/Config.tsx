@@ -7,7 +7,8 @@ import { ArrowLeftIcon, RefreshCcw, X } from "lucide-react";
 import { toast } from "sonner";
 import { FaSave } from "react-icons/fa";
 import { useConfigData } from "../provider";
-import { useQuizData } from "../../(game)/Quiz/Provider";
+import { useQuizData } from "../../Quiz/Provider";
+import ConfigQuestion from "./ConfigQuestion";
 
 interface ConfigProps {
   isInGame?: boolean;
@@ -31,6 +32,7 @@ export default function Config({
     >
       <ConfigSound />
       <ConfigTimer />
+      <ConfigQuestion />
 
       <div className="flex justify-between pt-4">
         <motion.button

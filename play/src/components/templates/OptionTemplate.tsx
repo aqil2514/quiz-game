@@ -1,6 +1,6 @@
 "use client";
 import MainContainer from "../layouts/Container/MainContainer";
-import Config from "../features/Option/components/Config";
+import Config from "../features/(game)/Option/components/Config";
 
 export default function OptionTemplate() {
   return (

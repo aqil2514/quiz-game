@@ -7,6 +7,7 @@ import React, {
   useContext,
   useState,
   useMemo,
+  useEffect,
 } from "react";
 import { defaultQuizState } from "./variables";
 import { useRouter } from "next/navigation";
@@ -43,14 +44,15 @@ interface QuizProviderProps {
 }
 
 export function QuizProvider({ children, questions }: QuizProviderProps) {
-  const { useQuestionTime, timer: configTimer } = useConfigStore();
+  const { useQuestionTime, timer: configTimer, totalQuestion } = useConfigStore();
 
+  // Hooks
   const [currentQuiz, setCurrentQuiz] = useState<number>(0);
   const [quizState, setQuizState] = useState<QuizState>(defaultQuizState);
   const [correctAnswers, setCorrectAnswers] = useState<number>(0);
   const [filteredQuestions, setFilteredQuestions] =
     useState<QuizQuestion[]>(questions);
-
+  const router = useRouter();
   const time = useMemo(() => {
     const time = new Date();
     if (useQuestionTime) {
@@ -64,13 +66,17 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
     return time;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [useQuestionTime, currentQuiz]);
-
   const stopwatch = useStopwatch();
   const timer = useTimer({ expiryTimestamp: time });
 
-  const router = useRouter();
-  const nextQuestions = questions[currentQuiz + 1];
+  // EFFECTS
+  useEffect(() => {
+    setFilteredQuestions(prev => prev.slice(0, totalQuestion))
+  }, [totalQuestion])
 
+  const nextQuestions = filteredQuestions[currentQuiz + 1];
+
+  // Controller
   const resetHandler = () => {
     toast.info("Permainan dimulai ulang");
     // TODO : Fix nanti. Double render

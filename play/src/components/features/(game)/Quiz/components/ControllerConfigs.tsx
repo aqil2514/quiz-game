@@ -1,5 +1,5 @@
 import ControllerContainer from "@/components/layouts/Container/ControllerContainer";
-import Config from "../../../Option/components/Config";
+import Config from "../../Option/components/Config";
 
 interface ControllerConfigsProps{
   closeHandler: () => void;

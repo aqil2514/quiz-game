@@ -2,8 +2,8 @@ import { Progress } from "@/components/ui/progress";
 import { useQuizData } from "../Provider";
 
 export default function ProgressBar() {
-  const { questions, currentQuiz } = useQuizData();
-  const totalQuiz = questions.length;
+  const { filteredQuestions, currentQuiz } = useQuizData();
+  const totalQuiz = filteredQuestions.length;
   const value = ((currentQuiz + 1) / totalQuiz) * 100;
 
   return (

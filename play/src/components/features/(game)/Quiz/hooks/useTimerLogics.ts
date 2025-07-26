@@ -3,14 +3,14 @@ import { useQuizData } from "../Provider";
 import { useConfigStore } from "@/store/config-store";
 
 export function useTimerLogics() {
-  const { setCurrentQuiz, timer, currentQuiz, questions } = useQuizData();
+  const { setCurrentQuiz, timer, currentQuiz, filteredQuestions } = useQuizData();
   const { useQuestionTime, timer: configTimer } = useConfigStore();
 
   const time = useMemo(() => {
     const time = new Date();
     if (useQuestionTime) {
       time.setSeconds(
-        time.getSeconds() + questions[currentQuiz].timeLimitSeconds
+        time.getSeconds() + filteredQuestions[currentQuiz].timeLimitSeconds
       );
     } else {
       time.setSeconds(time.getSeconds() + configTimer);
@@ -20,7 +20,7 @@ export function useTimerLogics() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [useQuestionTime, currentQuiz]);
 
-  const nowQuiz = questions[currentQuiz];
+  const nowQuiz = filteredQuestions[currentQuiz];
 
   const { seconds, restart: timerRestart } = timer;
   const initialTime = useMemo(() => {
