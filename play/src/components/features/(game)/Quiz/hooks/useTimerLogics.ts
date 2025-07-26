@@ -33,10 +33,6 @@ export function useTimerLogics() {
 
   // Jika terjadi perpindahan soal, restart waktunya
   useEffect(() => {
-    if (currentQuiz === 0) {
-      return;
-    }
-
     timerRestart(time);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQuiz]);

@@ -14,6 +14,7 @@ import { useConfigStore } from "@/store/config-store";
 import { useStopwatch, useTimer } from "react-timer-hook";
 import { useStopwatchResultType } from "react-timer-hook/dist/types/src/useStopwatch";
 import { useTimerResultType } from "react-timer-hook/dist/types/src/useTimer";
+import { toast } from "sonner";
 
 interface QuizContextState {
   questions: QuizQuestion[];
@@ -62,7 +63,7 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
 
     return time;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [useQuestionTime]);
+  }, [useQuestionTime, currentQuiz]);
 
   const stopwatch = useStopwatch();
   const timer = useTimer({ expiryTimestamp: time });
@@ -71,11 +72,13 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
   const nextQuestions = questions[currentQuiz + 1];
 
   const resetHandler = () => {
+    toast.info("Permainan dimulai ulang");
+    router.refresh();
     setQuizState(defaultQuizState);
     setCorrectAnswers(0);
     setCurrentQuiz(0);
-    timer.restart(time)
-    router.refresh();
+    stopwatch.reset();
+    timer.restart(time);
   };
 
   const skipHandler = () => {

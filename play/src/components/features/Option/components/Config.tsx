@@ -7,6 +7,7 @@ import { ArrowLeftIcon, RefreshCcw, X } from "lucide-react";
 import { toast } from "sonner";
 import { FaSave } from "react-icons/fa";
 import { useConfigData } from "../provider";
+import { useQuizData } from "../../(game)/Quiz/Provider";
 
 interface ConfigProps {
   isInGame?: boolean;
@@ -18,6 +19,7 @@ export default function Config({
   closeHandler,
 }: ConfigProps) {
   const router = useRouter();
+  const { resetHandler } = useQuizData();
   const { saveConfig } = useConfigData();
 
   return (
@@ -56,14 +58,15 @@ export default function Config({
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => {
-            if (isInGame) {
-              saveConfig();
-              location.reload();
-              return;
-            }
             saveConfig();
             toast.success("Perubahan disimpan");
-            router.push("/");
+            if (isInGame) {
+              setTimeout(() => {
+                resetHandler();
+              }, 100);
+            } else {
+              router.push("/");
+            }
           }}
           className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition"
         >
