@@ -16,7 +16,7 @@ export default function QuizCard() {
       animate="visible"
       className="w-full flex justify-center items-center"
     >
-      <Card className="bg-blue-200/50 border-none shadow-blue-100 shadow-md w-3/4">
+      <Card className="bg-blue-200/50 border-none shadow-blue-100 shadow-md w-full md:w-3/4">
         <CardHeader className="flex flex-wrap">
           <CardTitle>
             Pertanyaan #{currentQuiz + 1} ({question.timeLimitSeconds} Detik)
@@ -25,8 +25,8 @@ export default function QuizCard() {
         <CardContent className="space-y-4">
           <p
             className={cn(
-              "text-xl font-bold",
-              quizState.isPausedUser && "blur-sm"
+              "text-lg md:text-xl font-bold",
+              quizState.isPausedUser || quizState.isConfig && "blur-sm",
             )}
           >
             {question.question}
@@ -44,11 +44,12 @@ export default function QuizCard() {
           ) : (
             <p className="h-10" />
           )}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {question.options.map((q) => {
               const isSelected = quizState.isAnswered;
               const isCorrectAnswer = isSelected && q === answer;
               const isPaused = quizState.isPausedUser;
+              const isConfig = quizState.isConfig;
 
               return (
                 <Button
@@ -57,7 +58,7 @@ export default function QuizCard() {
                   className={cn(
                     "bg-blue-400 hover:bg-blue-500 active:scale-90 duration-200 cursor-pointer",
                     isCorrectAnswer && "bg-green-500",
-                    isPaused && "blur-sm"
+                    isPaused || isConfig && "blur-sm",
                   )}
                   onClick={clickHandler}
                 >

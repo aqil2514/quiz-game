@@ -17,17 +17,17 @@ export default function ContinueControllerAnswered() {
   return (
     <ControllerContainer onClick={clickHandler}>
       <div className="absolute inset-0 flex items-center justify-center px-6">
-        <div className="bg-gradient-to-br from-[#1f2937]/80 to-[#111827]/80 backdrop-blur-xl p-8 rounded-3xl border border-white/10 text-white max-w-2xl w-full shadow-2xl space-y-6 animate-fade-in">
+        <div className="bg-gradient-to-br from-[#1f2937]/80 to-[#111827]/80 backdrop-blur-xl p-2 md:p-8 rounded-3xl border border-white/10 text-white max-w-2xl w-full shadow-2xl space-y-6 animate-fade-in">
 
           {/* Judul */}
           <div className="text-center space-y-2">
-            <h2 className={`text-3xl font-bold flex justify-center items-center gap-2 ${
+            <h2 className={`text-xl md:text-3xl font-bold flex justify-center items-center gap-2 ${
               isCorrect ? "text-green-400" : "text-red-400"
             }`}>
               {isCorrect ? <ThumbsUp /> : <ThumbsDown />}
               {isCorrect ? "Jawaban Kamu Benar!" : "Sayang, Jawabanmu Salah!"}
             </h2>
-            <p className="text-white/70">
+            <p className="text-sm md:text-base text-white/70">
               {nextQuestions
                 ? "Klik di mana pun untuk melanjutkan ke soal berikutnya"
                 : "Kuis telah selesai. Lihat hasil akhir!"}
@@ -99,7 +99,7 @@ export default function ContinueControllerAnswered() {
 
           {/* Call to Action */}
           <div className="text-center pt-4">
-            <p className="text-xl font-bold animate-pulse">
+            <p className="text-base md:text-xl font-bold animate-pulse">
               {nextQuestions
                 ? "🖱 Klik untuk lanjut ke soal berikutnya"
                 : "🏁 Klik untuk melihat skor akhir"}

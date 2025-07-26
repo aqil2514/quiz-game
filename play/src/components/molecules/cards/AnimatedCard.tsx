@@ -14,14 +14,14 @@ export default function AnimatedCard({
 }: AnimatedCardProps) {
   return (
     <motion.div
-      className="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg p-10 max-w-md w-full text-center space-y-8"
+      className="bg-white dark:bg-zinc-900 rounded-2xl shadow-lg p-4 md:p-10 max-w-md w-full text-center space-y-4 md:space-y-8"
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.4 }}
     >
       {title && (
         <motion.h1
-          className="text-3xl font-bold text-gray-900 dark:text-white"
+          className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white"
           initial={{ y: -10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -32,7 +32,7 @@ export default function AnimatedCard({
 
       {description && (
         <motion.p
-          className="text-gray-600 dark:text-gray-400"
+          className="text-sm md:text-base text-gray-600 dark:text-gray-400"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}

@@ -34,7 +34,7 @@ export default function Config({
       <ConfigTimer />
       <ConfigQuestion />
 
-      <div className="flex justify-between pt-4">
+      <div className="flex flex-col md:flex-row gap-4 justify-between pt-4">
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}

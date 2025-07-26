@@ -37,12 +37,12 @@ export default function ContinueControllerFinish() {
               {score}
             </span>
           </p>
-          <p>Total Soal:</p>
-          <p>{totalQuestions}</p>
-          <p>Jawaban Benar:</p>
-          <p>{correctAnswers}</p>
-          <p>Waktu Mengerjakan:</p>
-          <p>{duration}</p>
+          <p className="text-sm md:text-base">Total Soal:</p>
+          <p className="text-sm md:text-base">{totalQuestions}</p>
+          <p className="text-sm md:text-base">Jawaban Benar:</p>
+          <p className="text-sm md:text-base">{correctAnswers}</p>
+          <p className="text-sm md:text-base">Waktu Mengerjakan:</p>
+          <p className="text-sm md:text-base">{duration}</p>
         </div>
 
         <div className="flex gap-4 justify-center">
