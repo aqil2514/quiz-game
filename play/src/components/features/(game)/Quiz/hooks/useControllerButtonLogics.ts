@@ -1,7 +1,9 @@
 import { useQuizData } from "../Provider";
 
 export function useControllerButtonLogics() {
-  const { setQuizState, stopTimer } = useQuizData();
+  const { setQuizState, stopTimer, stopwatch } = useQuizData();
+
+  const { seconds, minutes } = stopwatch;
 
   const pauseHandler = () => {
     setQuizState((prev) => ({ ...prev, isPausedUser: true }));
@@ -13,5 +15,9 @@ export function useControllerButtonLogics() {
     stopTimer();
   };
 
-  return { pauseHandler, configHandler };
+  const stopwatchTime = `${String(minutes).padStart(2, "0")}:${String(
+    seconds
+  ).padStart(2, "0")}`;
+
+  return { pauseHandler, configHandler, stopwatchTime };
 }

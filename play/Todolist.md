@@ -31,15 +31,15 @@ Tujuan: Mulai menyimpan skor per user
 Auth.js (kalau pakai Next.js)
 Firebase Auth / Supabase Auth
 
-STEP 4: Buat Admin Panel
-Tujuan: Tambah/edit soal lewat UI
+✅STEP 4: Buat Admin Panel
+✅Tujuan: Tambah/edit soal lewat UI
 
 🔧 Fitur Tambahan:
 ✅ Role-based access (admin / user)
 ✅ Halaman untuk tambah/edit/hapus soal
 ✅ Upload soal per kategori
 ✅ Validasi input soal
-Quiz mulai menggunakan data soal yang dari database
+✅Quiz mulai menggunakan data soal yang dari database
 📁 Struktur Tambahan:
 ⚙️ Backend:
 ✅ Buat API endpoint (REST atau Supabase RPC) untuk CRUD soal

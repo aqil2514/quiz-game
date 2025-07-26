@@ -19,7 +19,9 @@ export default function AdminManageQuestionsTemplate({
 
   return (
     <MainContainer className="pb-8">
-      <div>Header</div>
+      <div>
+        <h1 className="text-xl font-bold">Kelola Soal</h1>
+      </div>
       <AdminPageHeader context={adminPageHaderContext} />
       <DataTable
         variants="default"

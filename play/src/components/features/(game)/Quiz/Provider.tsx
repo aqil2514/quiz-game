@@ -14,6 +14,8 @@ import { useRouter } from "next/navigation";
 import { useConfigStore } from "@/store/config-store";
 import { GameTimer } from "@/@types/time";
 import { getAndRunQuizTimer } from "./utils";
+import { useStopwatch } from "react-timer-hook";
+import { useStopwatchResultType } from "react-timer-hook/dist/types/src/useStopwatch";
 
 interface QuizContextState {
   questions: QuizQuestion[];
@@ -36,6 +38,7 @@ interface QuizContextState {
   stopTimer: () => void;
   workTime: number[];
   setWorkTime: Dispatch<SetStateAction<number[]>>;
+  stopwatch: useStopwatchResultType;
 }
 
 const QuizContext = createContext<QuizContextState>({} as QuizContextState);
@@ -57,6 +60,8 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
     isRunning: true,
   });
   const [workTime, setWorkTime] = useState<number[]>([]);
+
+  const stopwatch = useStopwatch();
 
   const { useQuestionTime, setTimer } = useConfigStore();
 
@@ -130,6 +135,7 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
   };
 
   const value: QuizContextState = {
+    stopwatch,
     questions,
     currentQuiz,
     setCurrentQuiz,

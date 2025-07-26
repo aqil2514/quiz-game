@@ -38,6 +38,7 @@ export default function SelectCategory({
           <SelectValue placeholder="Pilih Kategori" />
         </SelectTrigger>
         <SelectContent>
+          <SelectItem value="all">Semua</SelectItem>
           {categoryList.map((cat) => (
             <SelectItem key={cat.value} value={cat.value}>
               {cat.label}

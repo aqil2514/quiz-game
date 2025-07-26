@@ -5,7 +5,8 @@ import { Pause, Settings } from "lucide-react";
 import { useControllerButtonLogics } from "../hooks/useControllerButtonLogics";
 
 export default function ControllerButton() {
-  const { pauseHandler, configHandler } = useControllerButtonLogics();
+  const { pauseHandler, configHandler, stopwatchTime } =
+    useControllerButtonLogics();
   return (
     <motion.div
       variants={fadeUpVariants}
@@ -27,6 +28,9 @@ export default function ControllerButton() {
       >
         <Settings />
       </Button>
+      <div className="my-auto px-3 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-sm font-mono shadow-inner">
+        ⏱ {stopwatchTime}
+      </div>
     </motion.div>
   );
 }
