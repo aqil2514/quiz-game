@@ -11,7 +11,6 @@ export default function ContinueControllerFinish() {
     resetHandler,
     exitHandler,
     duration,
-    timeQuestTotal,
   } = useControllerLogics();
   const isPerfect = score === 100;
   const isGood = score >= 70;
@@ -43,9 +42,7 @@ export default function ContinueControllerFinish() {
           <p>Jawaban Benar:</p>
           <p>{correctAnswers}</p>
           <p>Waktu Mengerjakan:</p>
-          <p>{duration} detik</p>
-          <p>Total Waktu Kuis:</p>
-          <p>{timeQuestTotal} detik</p>
+          <p>{duration}</p>
         </div>
 
         <div className="flex gap-4 justify-center">

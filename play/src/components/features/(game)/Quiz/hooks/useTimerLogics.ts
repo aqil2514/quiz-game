@@ -1,30 +1,33 @@
 import { useEffect } from "react";
 import { useQuizData } from "../Provider";
-import { getAndRunQuizTimer } from "../utils";
 
 export function useTimerLogics() {
-  const { startTimer, quizTimer, setCurrentQuiz, nextQuestions, setQuizTimer } =
-    useQuizData();
+  const {
+    setCurrentQuiz,
+    timer,
+    currentQuiz,
+    questions,
+  } = useQuizData();
+
+  const time = new Date();
+
+  const { seconds, restart: timerRestart } = timer;
 
   useEffect(() => {
-    if (!quizTimer.isRunning) return;
-    startTimer();
-  }, [startTimer, quizTimer]);
+    if (currentQuiz === 0) return;
+    const nowQuiz = questions[currentQuiz];
+    time.setSeconds(time.getSeconds() + nowQuiz.timeLimitSeconds);
+    timerRestart(time);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentQuiz]);
 
   useEffect(() => {
-    const isCurrentZero = quizTimer.current === 0;
-    const isRunning = quizTimer.isRunning;
-
-    if (isRunning || !isCurrentZero) return;
-
-    if (nextQuestions) {
-      setQuizTimer(getAndRunQuizTimer(nextQuestions));
-      setCurrentQuiz((prev) => prev + 1);
-    }
-  }, [quizTimer, nextQuestions, setQuizTimer, setCurrentQuiz]);
+    if (seconds !== 0) return;
+    setCurrentQuiz((prev) => prev + 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seconds]);
 
   return {
-    startTimer,
-    quizTimer,
+    seconds,
   };
 }

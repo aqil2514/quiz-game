@@ -7,15 +7,13 @@ import React, {
   useContext,
   useState,
   useEffect,
-  useRef,
 } from "react";
 import { defaultQuizState } from "./variables";
 import { useRouter } from "next/navigation";
 import { useConfigStore } from "@/store/config-store";
-import { GameTimer } from "@/@types/time";
-import { getAndRunQuizTimer } from "./utils";
-import { useStopwatch } from "react-timer-hook";
+import { useStopwatch, useTimer } from "react-timer-hook";
 import { useStopwatchResultType } from "react-timer-hook/dist/types/src/useStopwatch";
+import { useTimerResultType } from "react-timer-hook/dist/types/src/useTimer";
 
 interface QuizContextState {
   questions: QuizQuestion[];
@@ -32,13 +30,8 @@ interface QuizContextState {
   resumeHandler: () => void;
   skipHandler: () => void;
   exitHandler: () => void;
-  quizTimer: GameTimer;
-  setQuizTimer: Dispatch<SetStateAction<GameTimer>>;
-  startTimer: () => void;
-  stopTimer: () => void;
-  workTime: number[];
-  setWorkTime: Dispatch<SetStateAction<number[]>>;
   stopwatch: useStopwatchResultType;
+  timer: useTimerResultType;
 }
 
 const QuizContext = createContext<QuizContextState>({} as QuizContextState);
@@ -54,14 +47,12 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
   const [correctAnswers, setCorrectAnswers] = useState<number>(0);
   const [filteredQuestions, setFilteredQuestions] =
     useState<QuizQuestion[]>(questions);
-  const [quizTimer, setQuizTimer] = useState<GameTimer>({
-    current: Number(questions[currentQuiz].timeLimitSeconds),
-    total: Number(questions[currentQuiz].timeLimitSeconds),
-    isRunning: true,
-  });
-  const [workTime, setWorkTime] = useState<number[]>([]);
+
+  const time = new Date();
+  time.setSeconds(time.getSeconds() + questions[currentQuiz].timeLimitSeconds);
 
   const stopwatch = useStopwatch();
+  const timer = useTimer({ expiryTimestamp: time });
 
   const { useQuestionTime, setTimer } = useConfigStore();
 
@@ -78,11 +69,9 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
     setQuizState(defaultQuizState);
     setCorrectAnswers(0);
     setCurrentQuiz(0);
-    setWorkTime([]);
     if (useQuestionTime && questions[0].timeLimitSeconds) {
       setTimer(questions[0].timeLimitSeconds);
     }
-    setQuizTimer(getAndRunQuizTimer(questions[0]));
     router.refresh();
   };
 
@@ -97,45 +86,18 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
 
   const resumeHandler = () => {
     setQuizState((prev) => ({ ...prev, isPausedUser: false }));
-    setQuizTimer((prev) => ({ ...prev, isRunning: true }));
+    timer.resume();
+    stopwatch.start();
   };
 
   const exitHandler = () => {
     router.push("/");
   };
 
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  const startTimer = () => {
-    if (intervalRef.current) return;
-
-    intervalRef.current = setInterval(() => {
-      setQuizTimer((prev) => {
-        const next = prev.current - 1;
-
-        if (next <= 0) {
-          clearInterval(intervalRef.current!);
-          intervalRef.current = null;
-          return { ...prev, current: 0, isRunning: false };
-        }
-
-        return { ...prev, current: next };
-      });
-    }, 1000);
-
-    setQuizTimer((prev) => ({ ...prev, isRunning: true }));
-  };
-
-  const stopTimer = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-    setQuizTimer((prev) => ({ ...prev, isRunning: false }));
-  };
 
   const value: QuizContextState = {
     stopwatch,
+    timer,
     questions,
     currentQuiz,
     setCurrentQuiz,
@@ -150,12 +112,6 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
     resumeHandler,
     skipHandler,
     exitHandler,
-    quizTimer,
-    setQuizTimer,
-    startTimer,
-    stopTimer,
-    workTime,
-    setWorkTime,
   };
 
   return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;

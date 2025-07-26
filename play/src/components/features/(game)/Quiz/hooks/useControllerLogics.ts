@@ -1,6 +1,6 @@
 import { useSession } from "next-auth/react";
 import { useQuizData } from "../Provider";
-import { getAndRunQuizTimer, getQuizScore } from "../utils";
+import { getQuizScore } from "../utils";
 import { useEffect, useRef } from "react";
 import axios from "axios";
 
@@ -33,8 +33,8 @@ export function useControllerLogics() {
     resetHandler,
     nextQuestions,
     exitHandler,
-    setQuizTimer,
-    workTime,
+    timer,
+    stopwatch,
   } = useQuizData();
   const hasPosted = useRef<boolean>(false);
 
@@ -51,14 +51,15 @@ export function useControllerLogics() {
       return;
     }
 
-    setQuizTimer(getAndRunQuizTimer(nextQuestions));
-    setCurrentQuiz(currentQuiz + 1);
+    setCurrentQuiz(prev => prev + 1);
     setQuizState((prev) => ({ ...prev, isAnswered: false }));
+    stopwatch.start();
   };
 
   const closeConfigHandler = () => {
     setQuizState((prev) => ({ ...prev, isConfig: false }));
-    setQuizTimer((prev) => ({ ...prev, isRunning: true }));
+    timer.resume();
+    stopwatch.start();
   };
 
   const current = questions[currentQuiz];
@@ -67,7 +68,7 @@ export function useControllerLogics() {
     correctAnswers,
     questions,
     userId: session.data?.user.userId,
-    workTime,
+    stopwatch
   });
 
   useEffect(() => {

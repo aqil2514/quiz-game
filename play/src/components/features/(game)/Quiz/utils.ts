@@ -1,32 +1,25 @@
 import { QuizQuestion, QuizScore } from "@/@types/quiz";
-import { GameTimer } from "@/@types/time";
-
-export function getAndRunQuizTimer(question: QuizQuestion): GameTimer {
-  return {
-    current: question.timeLimitSeconds,
-    isRunning: true,
-    total: question.timeLimitSeconds,
-  };
-}
+import { useStopwatchResultType } from "react-timer-hook/dist/types/src/useStopwatch";
 
 interface GetQuizScoreParams {
   questions: QuizQuestion[];
   correctAnswers: number;
-  workTime: number[];
+  stopwatch: useStopwatchResultType;
   userId?: string;
 }
 export function getQuizScore(params: GetQuizScoreParams): QuizScore {
-  const { correctAnswers, questions, workTime, userId } = params;
+  const { correctAnswers, questions, stopwatch, userId } = params;
   const totalQuestions = questions.length;
   const score =
     totalQuestions > 0
       ? Math.round((correctAnswers / totalQuestions) * 100)
       : 0;
 
-  const duration = workTime.reduce((acc, curr) => acc + curr, 0);
-  const timeQuestTotal = questions
-    .map((q) => q.timeLimitSeconds)
-    .reduce((acc, curr) => acc + curr, 0);
+  const { seconds, minutes } = stopwatch;
+
+  const duration = `${String(minutes).padStart(2, "0")}:${String(
+    seconds
+  ).padStart(2, "0")}`;
 
   const result: QuizScore = {
     id: "",
@@ -36,7 +29,6 @@ export function getQuizScore(params: GetQuizScoreParams): QuizScore {
     score,
     totalQuestions,
     userId: userId ?? "public",
-    timeQuestTotal,
   };
   return result;
 }

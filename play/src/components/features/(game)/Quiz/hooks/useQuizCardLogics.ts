@@ -24,9 +24,8 @@ export function useQuizCardLogics() {
     quizState,
     setQuizState,
     setCorrectAnswers,
-    stopTimer,
-    setWorkTime,
-    quizTimer,
+    timer,
+    stopwatch,
   } = useQuizData();
 
   // Menyimpan jawaban yang dipilih user (opsional, untuk UI highlight)
@@ -58,12 +57,8 @@ export function useQuizCardLogics() {
 
     // Update status kuis (sudah dijawab & benar/tidak)
     setQuizState((prev) => ({ ...prev, isAnswered: true, isCorrect }));
-
-    // Tambah waktu mengerjakan
-    setWorkTime((prev) => [...prev, quizTimer.total - quizTimer.current]);
-
-    // Menjeda timer setelah menjawab
-    stopTimer();
+    timer.pause();
+    stopwatch.pause();
   };
 
   return {

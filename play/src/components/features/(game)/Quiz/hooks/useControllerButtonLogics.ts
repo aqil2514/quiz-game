@@ -1,19 +1,20 @@
 import { useQuizData } from "../Provider";
 
 export function useControllerButtonLogics() {
-  const { setQuizState, stopTimer, stopwatch } = useQuizData();
+  const { setQuizState, stopwatch, timer } = useQuizData();
 
-  const { seconds, minutes, pause:pauseStopwatch } = stopwatch;
+  const { seconds, minutes, pause: pauseStopwatch } = stopwatch;
+  const { pause: pauseTimer } = timer;
 
   const pauseHandler = () => {
     setQuizState((prev) => ({ ...prev, isPausedUser: true }));
-    stopTimer();
+    pauseTimer();
     pauseStopwatch();
   };
 
   const configHandler = () => {
     setQuizState((prev) => ({ ...prev, isConfig: true }));
-    stopTimer();
+    pauseTimer();
     pauseStopwatch();
   };
 

@@ -31,7 +31,6 @@ export interface QuizScore {
   category: string;
   score: number;
   totalQuestions: number;
-  timeQuestTotal: number;
-  duration: number;
+  duration: string;
   date: string;
 }
