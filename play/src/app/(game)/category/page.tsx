@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   title: "Category",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function CategoryPage() {
   const categories = await getAllCategories();
 

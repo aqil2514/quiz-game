@@ -73,6 +73,7 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
 
   const resetHandler = () => {
     toast.info("Permainan dimulai ulang");
+    // TODO : Fix nanti. Double render
     router.refresh();
     setQuizState(defaultQuizState);
     setCorrectAnswers(0);
