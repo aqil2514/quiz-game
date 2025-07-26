@@ -8,6 +8,7 @@ import ButtonControllers from "../features/(game)/Quiz/components/ButtonControll
 import { useHasHydrated } from "@/hooks/useHasHydrated";
 import Loading from "@/app/loading";
 import Timer from "../features/(game)/Quiz/components/Timer";
+import ProgressBar from "../features/(game)/Quiz/components/ProgresBar";
 
 interface QuizTemplateProps {
   questions: QuizQuestion[];
@@ -20,11 +21,12 @@ export default function QuizTemplate({ questions }: QuizTemplateProps) {
   return (
     <QuizProvider questions={questions}>
       <MainContainer className="flex flex-col items-center space-y-4 pt-8">
-        <div className="flex justify-between w-3/4">
+        <div className="flex justify-between items-center w-3/4">
           <ButtonControllers />
           <Timer />
         </div>
         <QuizCard />
+        <ProgressBar />
 
         <Controller />
       </MainContainer>
