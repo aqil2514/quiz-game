@@ -3,12 +3,13 @@ import { motion } from "framer-motion";
 import ConfigSound from "./ConfigSound";
 import ConfigTimer from "./ConfigTimer";
 import { useRouter } from "next/navigation";
-import { ArrowLeftIcon, RefreshCcw, X } from "lucide-react";
+import { ArrowLeftIcon, X } from "lucide-react";
 import { toast } from "sonner";
 import { FaSave } from "react-icons/fa";
 import { useConfigData } from "../provider";
-import { useQuizData } from "../../Quiz/Provider";
 import ConfigQuestion from "./ConfigQuestion";
+import { useConfigStore } from "@/store/config-store";
+import { SoundEffects } from "@/lib/audio/sound-effects";
 
 interface ConfigProps {
   isInGame?: boolean;
@@ -20,8 +21,13 @@ export default function Config({
   closeHandler,
 }: ConfigProps) {
   const router = useRouter();
-  const { resetHandler } = useQuizData();
   const { saveConfig } = useConfigData();
+  const { sound } = useConfigStore();
+
+  const backHandler = () => {
+    if (sound) SoundEffects.click();
+    router.push("/");
+  };
 
   return (
     <motion.div
@@ -31,14 +37,14 @@ export default function Config({
       className="bg-black/30 p-6 rounded-2xl shadow-md w-full max-w-2xl space-y-6"
     >
       <ConfigSound />
-      <ConfigTimer />
-      <ConfigQuestion />
+      {!isInGame && <ConfigTimer />}
+      {!isInGame && <ConfigQuestion />}
 
       <div className="flex flex-col md:flex-row gap-4 justify-between pt-4">
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => router.back()}
+          onClick={backHandler}
           className="cursor-pointer flex items-center gap-2 px-4 py-2 text-white border border-white/30 rounded-lg hover:bg-white/10 transition"
         >
           <ArrowLeftIcon className="w-5 h-5" />
@@ -63,21 +69,16 @@ export default function Config({
             saveConfig();
             toast.success("Perubahan disimpan");
             if (isInGame) {
-              setTimeout(() => {
-                resetHandler();
-              }, 100);
+              if (closeHandler) closeHandler();
+              router.refresh();
             } else {
               router.push("/");
             }
           }}
           className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-green-500 text-white font-medium rounded-lg hover:bg-green-600 transition"
         >
-          {isInGame ? (
-            <RefreshCcw className="w-5 h-5" />
-          ) : (
-            <FaSave className="w-5 h-5" />
-          )}
-          {isInGame ? "Simpan & Restart" : "Simpan"}
+          <FaSave className="w-5 h-5" />
+          Simpan
         </motion.button>
       </div>
     </motion.div>

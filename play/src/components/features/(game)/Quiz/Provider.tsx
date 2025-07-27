@@ -16,6 +16,7 @@ import { useStopwatch, useTimer } from "react-timer-hook";
 import { useStopwatchResultType } from "react-timer-hook/dist/types/src/useStopwatch";
 import { useTimerResultType } from "react-timer-hook/dist/types/src/useTimer";
 import { toast } from "sonner";
+import { SoundEffects } from "@/lib/audio/sound-effects";
 
 interface QuizContextState {
   questions: QuizQuestion[];
@@ -44,7 +45,12 @@ interface QuizProviderProps {
 }
 
 export function QuizProvider({ children, questions }: QuizProviderProps) {
-  const { useQuestionTime, timer: configTimer, totalQuestion } = useConfigStore();
+  const {
+    useQuestionTime,
+    timer: configTimer,
+    totalQuestion,
+    sound,
+  } = useConfigStore();
 
   // Hooks
   const [currentQuiz, setCurrentQuiz] = useState<number>(0);
@@ -71,13 +77,14 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
 
   // EFFECTS
   useEffect(() => {
-    setFilteredQuestions(prev => prev.slice(0, totalQuestion))
-  }, [totalQuestion])
+    setFilteredQuestions((prev) => prev.slice(0, totalQuestion));
+  }, [totalQuestion]);
 
   const nextQuestions = filteredQuestions[currentQuiz + 1];
 
   // Controller
   const resetHandler = () => {
+    if (sound) SoundEffects.start();
     toast.info("Permainan dimulai ulang");
     // TODO : Fix nanti. Double render
     router.refresh();
@@ -89,6 +96,8 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
   };
 
   const skipHandler = () => {
+    if (sound) SoundEffects.wrong();
+
     if (!nextQuestions) return;
     timer.restart(time);
     setCurrentQuiz((prev) => prev + 1);
@@ -96,12 +105,14 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
   };
 
   const resumeHandler = () => {
+    if (sound) SoundEffects.start();
     setQuizState((prev) => ({ ...prev, isPausedUser: false }));
     timer.resume();
     stopwatch.start();
   };
 
   const exitHandler = () => {
+    if (sound) SoundEffects.click();
     router.push("/");
   };
 

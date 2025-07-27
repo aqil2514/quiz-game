@@ -1,10 +1,12 @@
 import { useEffect, useMemo } from "react";
 import { useQuizData } from "../Provider";
 import { useConfigStore } from "@/store/config-store";
+import { SoundEffects } from "@/lib/audio/sound-effects";
 
 export function useTimerLogics() {
-  const { setCurrentQuiz, timer, currentQuiz, filteredQuestions } = useQuizData();
-  const { useQuestionTime, timer: configTimer } = useConfigStore();
+  const { setCurrentQuiz, timer, currentQuiz, filteredQuestions } =
+    useQuizData();
+  const { useQuestionTime, timer: configTimer, sound } = useConfigStore();
 
   const time = useMemo(() => {
     const time = new Date();
@@ -39,9 +41,20 @@ export function useTimerLogics() {
 
   //** Jika waktunya 0, langsung ke soal berikutnya */
   useEffect(() => {
-    if (seconds !== 0) return;
+    if (sound) {
+      switch (seconds) {
+        case 3:
+          SoundEffects.timePassing();
+          break;
+        case 0:
+          SoundEffects.timeEnd();
+          setCurrentQuiz((prev) => prev + 1);
+          break;
+        default:
+          break;
+      }
+    }
 
-    setCurrentQuiz((prev) => prev + 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seconds]);
 

@@ -1,28 +1,41 @@
 import { Button } from "@/components/ui/button";
+import { SoundEffects } from "@/lib/audio/sound-effects";
+import { useConfigStore } from "@/store/config-store";
 import { motion } from "framer-motion";
 import { BookOpen, PlayCircle, Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function MenuItems() {
   const router = useRouter();
+  const { sound } = useConfigStore();
 
   const menuItems = [
     {
       label: "Mulai Kuis",
       icon: <PlayCircle className="w-5 h-5" />,
-      onClick: () => router.push("/category"),
+      onClick: () => {
+        if (sound) SoundEffects.start();
+        router.push("/category");
+      },
       className: "bg-green-600 hover:bg-green-700 text-white",
     },
     {
       label: "Panduan",
       icon: <BookOpen className="w-5 h-5" />,
-      onClick: () => alert("Panduan belum tersedia."),
+      onClick: () => {
+        if (sound) SoundEffects.wrong();
+        toast.error("Panduan belum tersedia.");
+      },
       className: "bg-blue-500 hover:bg-blue-600 text-white",
     },
     {
       label: "Opsi",
       icon: <Settings className="w-5 h-5" />,
-      onClick: () => router.push("/option"),
+      onClick: () => {
+        if (sound) SoundEffects.click();
+        router.push("/option");
+      },
       className: "bg-gray-500 hover:bg-gray-600 text-white",
     },
   ] as const;

@@ -8,7 +8,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SoundEffects } from "@/lib/audio/sound-effects";
 import { fadeUpVariants } from "@/lib/motionVariants";
+import { useConfigStore } from "@/store/config-store";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -21,8 +23,10 @@ export default function SelectCategory({
   const [category, setCategory] = useState<string>("");
   const router = useRouter();
   const categoryList = mapQuizCategoryToFilterOptions(categories);
+  const { sound } = useConfigStore();
 
   const playHandler = () => {
+    if (sound) SoundEffects.start();
     router.push(`/quiz?category=${category}`);
   };
 

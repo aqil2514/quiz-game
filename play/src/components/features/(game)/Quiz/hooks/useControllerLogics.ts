@@ -3,6 +3,8 @@ import { useQuizData } from "../Provider";
 import { getQuizScore } from "../utils";
 import { useEffect, useRef } from "react";
 import axios from "axios";
+import { useConfigStore } from "@/store/config-store";
+import { SoundEffects } from "@/lib/audio/sound-effects";
 
 /**
  * Hook logika utama untuk mengelola alur kuis dan kontrol navigasi soal.
@@ -37,6 +39,14 @@ export function useControllerLogics() {
     stopwatch,
   } = useQuizData();
   const hasPosted = useRef<boolean>(false);
+  const { sound } = useConfigStore();
+
+  const quizScore = getQuizScore({
+    correctAnswers,
+    questions: filteredQuestions,
+    userId: session.data?.user.userId,
+    stopwatch,
+  });
 
   // Jumlah total soal
 
@@ -47,16 +57,29 @@ export function useControllerLogics() {
    */
   const clickHandler = () => {
     if (!nextQuestions) {
+      if (sound) {
+        const { score } = quizScore
+        if (score === 100) {
+          SoundEffects.perfect();
+        } else if (score >= 70) {
+          SoundEffects.win();
+        } else {
+          SoundEffects.lose();
+        }
+      }
+
       setQuizState((prev) => ({ ...prev, isFinished: true }));
       return;
     }
 
-    setCurrentQuiz(prev => prev + 1);
+    if (sound) SoundEffects.click();
+    setCurrentQuiz((prev) => prev + 1);
     setQuizState((prev) => ({ ...prev, isAnswered: false }));
     stopwatch.start();
   };
 
   const closeConfigHandler = () => {
+    if (sound) SoundEffects.click();
     setQuizState((prev) => ({ ...prev, isConfig: false }));
     timer.resume();
     stopwatch.start();
@@ -64,12 +87,7 @@ export function useControllerLogics() {
 
   const current = filteredQuestions[currentQuiz];
 
-  const quizScore = getQuizScore({
-    correctAnswers,
-    questions:filteredQuestions,
-    userId: session.data?.user.userId,
-    stopwatch
-  });
+  
 
   useEffect(() => {
     if (!quizState.isFinished || hasPosted.current) return;

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useQuizData } from "../Provider";
+import { SoundEffects } from "@/lib/audio/sound-effects";
+import { useConfigStore } from "@/store/config-store";
 
 /**
  * Hook logika utama untuk menangani interaksi pengguna dengan kuis.
@@ -27,6 +29,7 @@ export function useQuizCardLogics() {
     timer,
     stopwatch,
   } = useQuizData();
+  const { sound } = useConfigStore();
 
   // Menyimpan jawaban yang dipilih user (opsional, untuk UI highlight)
   const [option, setOption] = useState<string>("");
@@ -50,7 +53,12 @@ export function useQuizCardLogics() {
 
     // Menentukan apakah jawaban benar
     const isCorrect = optionSelected.toLowerCase() === answer.toLowerCase();
-    if (isCorrect) setCorrectAnswers((prev) => prev + 1);
+    if (isCorrect) {
+      if (sound) SoundEffects.correct();
+      setCorrectAnswers((prev) => prev + 1);
+    } else {
+      if (sound) SoundEffects.wrong();
+    }
 
     // Menandai jawaban yang dipilih
     setOption(optionSelected);
