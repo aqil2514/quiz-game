@@ -1,4 +1,4 @@
-import { QuizQuestion, QuizScore } from "@/@types/quiz";
+import { QuizQuestion, QuizQuestionHistory, QuizScore } from "@/@types/quiz";
 import { useStopwatchResultType } from "react-timer-hook/dist/types/src/useStopwatch";
 
 interface GetQuizScoreParams {
@@ -6,10 +6,14 @@ interface GetQuizScoreParams {
   correctAnswers: number;
   stopwatch: useStopwatchResultType;
   userId?: string;
+  questionHistory: QuizQuestionHistory[];
 }
 export function getQuizScore(params: GetQuizScoreParams): QuizScore {
-  const { correctAnswers, questions, stopwatch, userId } = params;
+  const { correctAnswers, questions, stopwatch, userId, questionHistory } =
+    params;
   const totalQuestions = questions.length;
+  const categories = questions.map((q) => q.category);
+  const categorySet = new Set<string>(categories);
   const score =
     totalQuestions > 0
       ? Math.round((correctAnswers / totalQuestions) * 100)
@@ -22,13 +26,14 @@ export function getQuizScore(params: GetQuizScoreParams): QuizScore {
   ).padStart(2, "0")}`;
 
   const result: QuizScore = {
-    id: "",
-    category: questions[0].category,
+    category: categorySet.size === 1 ? questions[0].category : "Campuran",
     date: new Date().toISOString(),
     duration,
+    totalCorrectAnswers: correctAnswers,
     score,
     totalQuestions,
     userId: userId ?? "public",
+    questionHistory,
   };
   return result;
 }

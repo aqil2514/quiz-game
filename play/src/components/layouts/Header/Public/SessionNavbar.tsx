@@ -11,7 +11,9 @@ import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { MdAdminPanelSettings } from "react-icons/md";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { menuNavigation } from "./variables/menuNavigation";
+import { cn } from "@/lib/utils";
 
 export default function SessionNavbar() {
   const session = useSession();
@@ -19,6 +21,7 @@ export default function SessionNavbar() {
   const roles = user.roles;
   const isAdmin = roles.includes("admin");
   const router = useRouter();
+  const pathname = usePathname();
 
   return (
     <Sheet>
@@ -40,15 +43,34 @@ export default function SessionNavbar() {
             >
               <LogOut />
             </Button>
-            {isAdmin && <Button
-              className="bg-yellow-500 hover:bg-yellow-600"
-              size={"icon"}
-              onClick={() => router.push("/admin")}
-            >
-              <MdAdminPanelSettings />
-            </Button>}
+            {isAdmin && (
+              <Button
+                className="bg-yellow-500 hover:bg-yellow-600"
+                size={"icon"}
+                onClick={() => router.push("/admin")}
+              >
+                <MdAdminPanelSettings />
+              </Button>
+            )}
           </div>
-          <Link href={"/score"}>Score</Link>
+          <div className="space-y-2">
+            {menuNavigation.map((m) => {
+              const isInPage = pathname === m.value;
+
+              return (
+                <Link
+                  href={m.value}
+                  key={m.value}
+                  className={cn(
+                    "font-bold text-white flex gap-2 items-center hover:bg-blue-500 px-4 py-2 rounded-sm duration-200 bg-none"
+                  , isInPage && "bg-blue-500")}
+                >
+                  <m.icon className="w-5 h-5" />
+                  <p>{m.label}</p>
+                </Link>
+              );
+            })}
+          </div>
         </SheetHeader>
       </SheetContent>
     </Sheet>

@@ -4,6 +4,7 @@ import { useConfigStore } from "@/store/config-store";
 import { motion } from "framer-motion";
 import { BookOpen, PlayCircle, Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { MdScore } from "react-icons/md";
 import { toast } from "sonner";
 
 export default function MenuItems() {
@@ -37,6 +38,15 @@ export default function MenuItems() {
         router.push("/option");
       },
       className: "bg-gray-500 hover:bg-gray-600 text-white",
+    },
+    {
+      label: "Skor",
+      icon: <MdScore className="w-5 h-5" />,
+      onClick: () => {
+        if (sound) SoundEffects.click();
+        router.push("/score");
+      },
+      className: "bg-yellow-500 hover:bg-yellow-600 text-white",
     },
   ] as const;
   return (

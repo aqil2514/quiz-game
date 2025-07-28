@@ -55,7 +55,7 @@ export class AuthService {
     const { email } = raw;
     let user: User;
     user = await this.userService.getUserByEmail(email);
-
+    
     if (!user) {
       await this.createUserViaGoogle(raw);
       user = await this.userService.getUserByEmail(email);

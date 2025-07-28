@@ -6,6 +6,10 @@ export interface QuizCategories {
   createdAt: string;
 }
 
+export interface QuizQuestionHistory extends QuizQuestion {
+  userAnswer: string;
+}
+
 export interface QuizQuestion {
   readonly id?: string;
   category: string;
@@ -26,11 +30,13 @@ export interface QuizState {
 }
 
 export interface QuizScore {
-  id: string;
+  id?: string;
   userId: string;
   category: string;
   score: number;
+  totalCorrectAnswers: number;
   totalQuestions: number;
   duration: string;
   date: string;
+  questionHistory: QuizQuestionHistory[];
 }

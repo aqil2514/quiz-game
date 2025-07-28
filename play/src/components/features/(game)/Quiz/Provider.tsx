@@ -1,5 +1,5 @@
 "use client";
-import { QuizQuestion, QuizState } from "@/@types/quiz";
+import { QuizQuestionHistory, QuizQuestion, QuizState } from "@/@types/quiz";
 import React, {
   createContext,
   Dispatch,
@@ -17,11 +17,15 @@ import { useStopwatchResultType } from "react-timer-hook/dist/types/src/useStopw
 import { useTimerResultType } from "react-timer-hook/dist/types/src/useTimer";
 import { toast } from "sonner";
 import { SoundEffects } from "@/lib/audio/sound-effects";
+import { shuffleQuestions } from "@/lib/quiz/shuffle-questions";
+import { getQuestionTime, GetQuestionTimeConfig } from "@/lib/quiz/get-time";
 
 interface QuizContextState {
   questions: QuizQuestion[];
   filteredQuestions: QuizQuestion[];
   setFilteredQuestions: Dispatch<SetStateAction<QuizQuestion[]>>;
+  questionHistory: QuizQuestionHistory[];
+  setQuestionHistory: Dispatch<SetStateAction<QuizQuestionHistory[]>>;
   currentQuiz: number;
   setCurrentQuiz: Dispatch<SetStateAction<number>>;
   quizState: QuizState;
@@ -58,20 +62,23 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
   const [correctAnswers, setCorrectAnswers] = useState<number>(0);
   const [filteredQuestions, setFilteredQuestions] =
     useState<QuizQuestion[]>(questions);
+  const [questionHistory, setQuestionHistory] = useState<QuizQuestionHistory[]>(
+    []
+  );
   const router = useRouter();
-  const time = useMemo(() => {
-    const time = new Date();
-    if (useQuestionTime) {
-      time.setSeconds(
-        time.getSeconds() + questions[currentQuiz].timeLimitSeconds
-      );
-    } else {
-      time.setSeconds(time.getSeconds() + configTimer);
-    }
 
-    return time;
+  const getTimeConfig: GetQuestionTimeConfig = {
+    configTimer,
+    currentQuiz,
+    questions: filteredQuestions,
+    isUseGlobalTime: useQuestionTime,
+  };
+
+  const time = useMemo(
+    () => getQuestionTime(getTimeConfig),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [useQuestionTime, currentQuiz]);
+    [useQuestionTime, questions]
+  );
   const stopwatch = useStopwatch();
   const timer = useTimer({ expiryTimestamp: time });
 
@@ -84,14 +91,18 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
 
   // Controller
   const resetHandler = () => {
+    router.refresh();
+
     if (sound) SoundEffects.start();
     toast.info("Permainan dimulai ulang");
-    // TODO : Fix nanti. Double render
-    router.refresh();
+    const newQuest = shuffleQuestions(questions);
+    setFilteredQuestions(newQuest.slice(0, totalQuestion));
     setQuizState(defaultQuizState);
     setCorrectAnswers(0);
     setCurrentQuiz(0);
+    setQuestionHistory([]);
     stopwatch.reset();
+
     timer.restart(time);
   };
 
@@ -133,6 +144,8 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
     resumeHandler,
     skipHandler,
     exitHandler,
+    questionHistory,
+    setQuestionHistory,
   };
 
   return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;

@@ -28,9 +28,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id: data.id,
           userId: data.userId,
         };
+
         return { ...user };
       },
     }),
+    
     Credentials({
       credentials: {
         identifier: {},

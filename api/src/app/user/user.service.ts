@@ -87,7 +87,7 @@ export class UserService {
         }) as User,
     )[0];
 
-    if (!data) throw new NotFoundException('Akun tidak ditemukan');
+    if (!data) return null;
 
     return data;
   }

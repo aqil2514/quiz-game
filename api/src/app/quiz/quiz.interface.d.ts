@@ -6,14 +6,8 @@ export interface QuizCategories {
   createdAt: string;
 }
 
-export interface QuizScore {
-  userId: string;
-  category: string;
-  score: number;
-  totalQuestions: number;
-  timeQuestTotal: number;
-  duration: number;
-  date: string;
+export interface QuizQuestionHistory extends QuizQuestion {
+  userAnswer: string;
 }
 
 export interface QuizQuestion {
@@ -24,4 +18,25 @@ export interface QuizQuestion {
   answer: string;
   explanation?: string;
   timeLimitSeconds: number;
+}
+
+export interface QuizState {
+  isCorrect: boolean;
+  isAnswered: boolean;
+  isFinished: boolean;
+  isPaused: boolean;
+  isPausedUser: boolean;
+  isConfig: boolean;
+}
+
+export interface QuizScore {
+  id?: string;
+  userId: string;
+  category: string;
+  score: number;
+  totalCorrectAnswers: number;
+  totalQuestions: number;
+  duration: string;
+  date: string;
+  questionHistory: QuizQuestionHistory[];
 }

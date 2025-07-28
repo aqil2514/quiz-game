@@ -1,10 +1,12 @@
 import { useSession } from "next-auth/react";
 import { useQuizData } from "../Provider";
 import { getQuizScore } from "../utils";
-import { useEffect, useRef } from "react";
-import axios from "axios";
 import { useConfigStore } from "@/store/config-store";
 import { SoundEffects } from "@/lib/audio/sound-effects";
+import { toast } from "sonner";
+import axios from "axios";
+import { useState } from "react";
+import { updatePublicScore } from "@/lib/local-storage/score";
 
 /**
  * Hook logika utama untuk mengelola alur kuis dan kontrol navigasi soal.
@@ -36,9 +38,9 @@ export function useControllerLogics() {
     nextQuestions,
     exitHandler,
     timer,
+    questionHistory,
     stopwatch,
   } = useQuizData();
-  const hasPosted = useRef<boolean>(false);
   const { sound } = useConfigStore();
 
   const quizScore = getQuizScore({
@@ -46,7 +48,10 @@ export function useControllerLogics() {
     questions: filteredQuestions,
     userId: session.data?.user.userId,
     stopwatch,
+    questionHistory,
   });
+
+  const [isSavingScore, setIsSavingScore] = useState<boolean>(false);
 
   // Jumlah total soal
 
@@ -58,7 +63,7 @@ export function useControllerLogics() {
   const clickHandler = () => {
     if (!nextQuestions) {
       if (sound) {
-        const { score } = quizScore
+        const { score } = quizScore;
         if (score === 100) {
           SoundEffects.perfect();
         } else if (score >= 70) {
@@ -85,25 +90,28 @@ export function useControllerLogics() {
     stopwatch.start();
   };
 
-  const current = filteredQuestions[currentQuiz];
+  const saveHandler = async () => {
+    const { data } = session;
+    if (!data) {
+      updatePublicScore(quizScore);
+      toast.info("Skor disimpan secara lokal!");
+      return;
+    }
 
-  
-
-  useEffect(() => {
-    if (!quizState.isFinished || hasPosted.current) return;
-
-    // TODO : Nanti fix ini. Sering 2x hit api
-    const postScore = async () => {
-      hasPosted.current = true;
       try {
-        await axios.post("/api/quiz/score", quizScore);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+      setIsSavingScore(true);
+      await axios.post("/api/quiz/score", quizScore);
+      toast.success("Skor berhasil disimpan!");
+    } catch (error) {
+      updatePublicScore(quizScore);
+      toast.warning("Gagal simpan ke server. Disimpan secara lokal.");
+      console.error(error);
+    } finally {
+      setIsSavingScore(false);
+    }
+  };
 
-    postScore();
-  }, [quizState.isFinished, quizScore]);
+  const current = filteredQuestions[currentQuiz];
 
   return {
     clickHandler,
@@ -115,6 +123,8 @@ export function useControllerLogics() {
     exitHandler,
     closeConfigHandler,
     current,
+    isSavingScore,
+    saveHandler,
     ...quizScore,
   };
 }

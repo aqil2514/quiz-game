@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuizData } from "../Provider";
 import { SoundEffects } from "@/lib/audio/sound-effects";
 import { useConfigStore } from "@/store/config-store";
+import { QuizQuestionHistory } from "@/@types/quiz";
 
 /**
  * Hook logika utama untuk menangani interaksi pengguna dengan kuis.
@@ -28,6 +29,7 @@ export function useQuizCardLogics() {
     setCorrectAnswers,
     timer,
     stopwatch,
+    setQuestionHistory,
   } = useQuizData();
   const { sound } = useConfigStore();
 
@@ -59,6 +61,13 @@ export function useQuizCardLogics() {
     } else {
       if (sound) SoundEffects.wrong();
     }
+
+    // Menyimpan ke history
+    const history: QuizQuestionHistory = {
+      ...question,
+      userAnswer: optionSelected,
+    };
+    setQuestionHistory((prev) => [...prev, history]);
 
     // Menandai jawaban yang dipilih
     setOption(optionSelected);
