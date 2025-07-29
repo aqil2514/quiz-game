@@ -1,8 +1,10 @@
+"use client";
 import { QuizScore } from "@/@types/quiz";
 
 const localStorageName = "quiz_public_user_score";
 
 export function getPublicScore(): QuizScore[] {
+  if (typeof window === "undefined") return [];
   const raw = localStorage.getItem(localStorageName);
   try {
     const data = JSON.parse(raw || "[]");

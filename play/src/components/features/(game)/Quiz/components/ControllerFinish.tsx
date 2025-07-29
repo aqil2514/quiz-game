@@ -21,7 +21,7 @@ export default function ContinueControllerFinish() {
 
   return (
     <ControllerContainer>
-      <div className="z-50 bg-gradient-to-br from-white/80 to-white/40 backdrop-blur-md p-8 rounded-2xl shadow-xl w-4/5 mx-auto text-center space-y-4 border border-white/50 grid grid-cols-2">
+      <div className="z-50 bg-gradient-to-br from-white/80 to-white/40 backdrop-blur-md p-8 rounded-2xl shadow-xl w-4/5 mx-auto text-center space-y-4 border border-white/50 flex flex-col md:grid grid-cols-2 h-4/5 overflow-auto">
         <div>
           <div className="text-4xl">{emoji}</div>
           <h2 className="text-3xl font-bold text-blue-700">Hasil Akhir</h2>
@@ -99,7 +99,7 @@ export default function ContinueControllerFinish() {
             })}
           </div>
         </div>
-        <div className="flex gap-4 justify-center col-span-2">
+        <div className="flex gap-4 flex-col md:flex-row justify-center col-span-2">
           <Button
             onClick={resetHandler}
             disabled={isSavingScore}
