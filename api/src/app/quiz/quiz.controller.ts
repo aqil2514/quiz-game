@@ -13,8 +13,8 @@ import {
 import { QuizQuestion, QuizScore } from './quiz.interface';
 import { QuizService } from './quiz.service';
 import { Request } from 'express';
-import { RoleGuard } from 'src/guards/roles.guard';
-import { Roles } from 'src/decorators/roles.decorator';
+import { RoleGuard } from '../../guards/roles.guard';
+import { Roles } from '../../decorators/roles.decorator';
 
 @Controller('quiz')
 export class QuizController {
