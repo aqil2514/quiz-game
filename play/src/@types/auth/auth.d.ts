@@ -3,6 +3,7 @@ import { User as BuiltInUSer } from "./user";
 
 declare module "next-auth" {
   interface Session {
+    accessToken: string;
     user: BuiltInUSer & DefaultSession["user"];
   }
 

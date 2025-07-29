@@ -9,7 +9,14 @@ import { AuthModule } from './auth/auth.module';
 import { QuizModule } from './quiz/quiz.module';
 
 @Module({
-  imports: [UserModule, ConfigModule.forRoot(), AuthModule, QuizModule],
+  imports: [
+    UserModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    AuthModule,
+    QuizModule,
+  ],
   controllers: [AppController],
   providers: [AppService, UserService, FirestoreService],
 })

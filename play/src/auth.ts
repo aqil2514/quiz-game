@@ -29,10 +29,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           userId: data.userId,
         };
 
-        return { ...user };
+        return { ...user, token: data.accessToken };
       },
     }),
-    
+
     Credentials({
       credentials: {
         identifier: {},
@@ -47,7 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             credentials
           );
           user = data.user as User;
-          return user;
+          return { ...user, token: data.accessToken };
         } catch (error) {
           console.error(error);
           if (isAxiosError(error)) {
@@ -64,6 +64,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
+        // @ts-expect-error Access token emang ga ada di User
+        token.token = user.token;
         token.roles = user.roles;
         token.id = user.id;
         token.username = user.username;
@@ -76,6 +78,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     session({ session, token }) {
       return {
         ...session,
+        accessToken: token.token,
         user: {
           ...session.user,
           id: token.id as string,

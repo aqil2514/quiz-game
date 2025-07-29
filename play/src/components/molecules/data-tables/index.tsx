@@ -20,7 +20,6 @@ export function DataTable<TData, TValue>({
   context,
   variants = "default",
 }: DataTableProps<TData, TValue>) {
-  console.log(context)
   if (variants === "default") return <DataTableDefault props={context} />;
 
   return null;

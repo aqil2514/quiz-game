@@ -8,10 +8,13 @@ import {
   Put,
   Query,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { QuizQuestion, QuizScore } from './quiz.interface';
 import { QuizService } from './quiz.service';
 import { Request } from 'express';
+import { RoleGuard } from 'src/guards/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
 
 @Controller('quiz')
 export class QuizController {
@@ -43,16 +46,22 @@ export class QuizController {
     return await this.quizService.getQuestionsByCategory(params.category);
   }
 
+  @UseGuards(RoleGuard)
+  @Roles('admin')
   @Post('/question')
   async createNewQuestion(@Body() body: QuizQuestion) {
     return await this.quizService.createNewQuestion(body);
   }
 
+  @UseGuards(RoleGuard)
+  @Roles('admin')
   @Put('/question')
   async editQuestion(@Body() body: QuizQuestion) {
     return await this.quizService.editQuizQuestion(body);
   }
 
+  @UseGuards(RoleGuard)
+  @Roles('admin')
   @Delete('/question')
   async deleteQuestion(@Query() query: { id: string }) {
     const { id } = query;
@@ -64,6 +73,4 @@ export class QuizController {
   async getAllCategories() {
     return await this.quizService.getAllCategory();
   }
-
-  
 }

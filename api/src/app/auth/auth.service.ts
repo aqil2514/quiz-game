@@ -8,11 +8,26 @@ import { GoogleOAuthProfile, LoginForm } from './auth.interface';
 import { UserService } from '../user/user.service';
 import { User, UserFormData } from '../user/user.interface';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UserService) {}
-  //   Private Variables and Methods
+  constructor(
+    private userService: UserService,
+    private jwtService: JwtService,
+  ) {}
+
+  private creteNewAccessToken(user: User) {
+    const payload = {
+      sub: user.id,
+      role: user.roles,
+      username: user.username,
+    };
+
+    const accessToken = this.jwtService.sign(payload);
+
+    return accessToken;
+  }
 
   private isLoginWithEmail(identifier: string): boolean {
     return /\S+@\S+\.\S+/.test(identifier);
@@ -38,7 +53,7 @@ export class AuthService {
     let user: User;
 
     if (isLoginWithEmail) {
-      user = await this.userService.getUserByEmail(identifier)
+      user = await this.userService.getUserByEmail(identifier);
     } else {
       user = await this.userService.getUserByUsername(identifier);
     }
@@ -48,19 +63,27 @@ export class AuthService {
     const isCompared = await bcrypt.compare(password, user.hashedPassword);
     if (!isCompared) throw new UnauthorizedException('Password salah');
 
-    return { message: `Login Berhasil! Selamat Datang ${user.username}`, user };
+    const accessToken = this.creteNewAccessToken(user)
+
+    return {
+      message: `Login Berhasil! Selamat Datang ${user.username}`,
+      accessToken,
+      user,
+    };
   }
 
   async loginUserWithGoogle(raw: GoogleOAuthProfile) {
     const { email } = raw;
     let user: User;
     user = await this.userService.getUserByEmail(email);
-    
+
     if (!user) {
       await this.createUserViaGoogle(raw);
       user = await this.userService.getUserByEmail(email);
     }
 
-    return user;
+    const accessToken = this.creteNewAccessToken(user)
+
+    return {...user, accessToken};
   }
 }
