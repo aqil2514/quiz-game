@@ -9,6 +9,8 @@ export default function ConfigTimer() {
     isUseQuestionTime,
     setIsUseQuesTionTime,
     timerConfig,
+    enableTime,
+    setEnableTime,
     setTimerConfig,
   } = useConfigData();
 
@@ -20,12 +22,22 @@ export default function ConfigTimer() {
       </div>
 
       <div className="flex items-center justify-between">
-        <Label className="text-gray-200">Gunakan waktu dari soal</Label>
+        <Label className="text-gray-200">Mulai dengan timer</Label>
         <Switch
-          checked={isUseQuestionTime}
-          onCheckedChange={() => setIsUseQuesTionTime(!isUseQuestionTime)}
+          checked={enableTime}
+          onCheckedChange={() => setEnableTime(!enableTime)}
         />
       </div>
+
+      {enableTime && (
+        <div className="flex items-center justify-between">
+          <Label className="text-gray-200">Gunakan waktu dari soal</Label>
+          <Switch
+            checked={isUseQuestionTime}
+            onCheckedChange={() => setIsUseQuesTionTime(!isUseQuestionTime)}
+          />
+        </div>
+      )}
 
       {!isUseQuestionTime && (
         <div className="space-y-2">

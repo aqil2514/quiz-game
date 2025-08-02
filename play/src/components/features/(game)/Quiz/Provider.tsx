@@ -54,6 +54,7 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
     timer: configTimer,
     totalQuestion,
     sound,
+    useTime,
   } = useConfigStore();
 
   // Hooks
@@ -80,12 +81,23 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
     [useQuestionTime, questions]
   );
   const stopwatch = useStopwatch();
-  const timer = useTimer({ expiryTimestamp: time });
+  const timer = useTimer({ expiryTimestamp: time, autoStart: false });
 
   // EFFECTS
   useEffect(() => {
     setFilteredQuestions((prev) => prev.slice(0, totalQuestion));
   }, [totalQuestion]);
+
+  useEffect(() => {
+    if (quizState.isPausedUser) return; // Jangan ganggu kalau user sedang pause
+
+    if (useTime) {
+      timer.restart(time);
+    } else {
+      timer.pause();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [useTime, time, quizState.isPausedUser]);
 
   const nextQuestions = filteredQuestions[currentQuiz + 1];
 
@@ -103,22 +115,44 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
     setQuestionHistory([]);
     stopwatch.reset();
 
-    timer.restart(time);
+    switch (useTime) {
+      case true:
+        timer.restart(time);
+        break;
+      default:
+        timer.pause();
+        break;
+    }
   };
 
   const skipHandler = () => {
     if (sound) SoundEffects.wrong();
 
     if (!nextQuestions) return;
-    timer.restart(time);
     setCurrentQuiz((prev) => prev + 1);
     setQuizState((prev) => ({ ...prev, isPausedUser: false }));
+
+    switch (useTime) {
+      case true:
+        timer.restart(time);
+        break;
+      default:
+        timer.pause();
+        break;
+    }
   };
 
   const resumeHandler = () => {
     if (sound) SoundEffects.start();
     setQuizState((prev) => ({ ...prev, isPausedUser: false }));
-    timer.resume();
+    switch (useTime) {
+      case true:
+        timer.restart(time);
+        break;
+      default:
+        timer.pause();
+        break;
+    }
     stopwatch.start();
   };
 

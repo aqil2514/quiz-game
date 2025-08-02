@@ -12,7 +12,13 @@ export function useTimerLogics() {
     filteredQuestions,
     setQuestionHistory,
   } = useQuizData();
-  const { useQuestionTime, timer: configTimer, sound } = useConfigStore();
+  const {
+    useQuestionTime,
+    timer: configTimer,
+    sound,
+    useTime,
+  } = useConfigStore();
+
 
   const time = useMemo(() => {
     const time = new Date();
@@ -30,7 +36,7 @@ export function useTimerLogics() {
 
   const nowQuiz = filteredQuestions[currentQuiz];
 
-  const { seconds, restart: timerRestart } = timer;
+  const { seconds, restart: timerRestart, pause } = timer;
   const initialTime = useMemo(() => {
     if (useQuestionTime) return nowQuiz.timeLimitSeconds;
 
@@ -69,8 +75,13 @@ export function useTimerLogics() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seconds]);
 
+  useEffect(() => {
+    if (useTime) pause();
+  }, [useTime, pause]);
+
   return {
     seconds,
     initialTime,
+    useTime,
   };
 }

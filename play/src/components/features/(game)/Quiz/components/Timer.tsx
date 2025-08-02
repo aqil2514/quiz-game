@@ -1,14 +1,15 @@
+import { Infinity } from "lucide-react";
 import { useTimerLogics } from "../hooks/useTimerLogics";
 
 export default function Timer() {
-  const { seconds, initialTime } = useTimerLogics();
+  const { seconds, initialTime, useTime } = useTimerLogics();
   const timeSeconds = String(seconds).padStart(2, "0");
 
   const radius = 30;
   const stroke = 4;
   const normalizedRadius = radius - stroke / 2;
   const circumference = 2 * Math.PI * normalizedRadius;
-const progress = ((initialTime - seconds) / initialTime) * circumference;
+  const progress = ((initialTime - seconds) / initialTime) * circumference;
 
   return (
     <div className="relative w-[80px] h-[80px]">
@@ -35,7 +36,7 @@ const progress = ((initialTime - seconds) / initialTime) * circumference;
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center text-white font-mono text-lg">
-        {timeSeconds}
+        {useTime ? timeSeconds : <Infinity /> }
       </div>
     </div>
   );

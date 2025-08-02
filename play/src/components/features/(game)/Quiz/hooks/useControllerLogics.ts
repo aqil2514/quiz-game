@@ -41,7 +41,7 @@ export function useControllerLogics() {
     questionHistory,
     stopwatch,
   } = useQuizData();
-  const { sound } = useConfigStore();
+  const { sound, useTime } = useConfigStore();
 
   const quizScore = getQuizScore({
     correctAnswers,
@@ -86,8 +86,15 @@ export function useControllerLogics() {
   const closeConfigHandler = () => {
     if (sound) SoundEffects.click();
     setQuizState((prev) => ({ ...prev, isConfig: false }));
-    timer.resume();
     stopwatch.start();
+    switch (useTime) {
+      case true:
+        timer.resume();
+        break;
+      default:
+        timer.pause();
+        break;
+    }
   };
 
   const saveHandler = async () => {
