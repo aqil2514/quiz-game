@@ -97,7 +97,6 @@ export function useQuizCardLogics() {
 
   const handlePlay = async () => {
     const audio = new Audio(audioUrl);
-    console.log(audio)
     try {
       await audio.play();
     } catch (error) {

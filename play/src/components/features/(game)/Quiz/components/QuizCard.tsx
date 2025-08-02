@@ -24,7 +24,7 @@ export default function QuizCard() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex gap-2">
+          <div className="flex flex-col md:flex-col gap-2">
             <Button size={"icon"} variant={"ghost"} onClick={handlePlay}>
               <AiFillSound />
             </Button>
