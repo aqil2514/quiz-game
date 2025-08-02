@@ -1,4 +1,6 @@
-import { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+
+import { useEffect, useState } from "react";
 import { useQuizData } from "../Provider";
 import { SoundEffects } from "@/lib/audio/sound-effects";
 import { useConfigStore } from "@/store/config-store";
@@ -78,6 +80,61 @@ export function useQuizCardLogics() {
     stopwatch.pause();
   };
 
+  // Text to Speech Start
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const getLanguage = () => {
+    switch (question.category.toLowerCase()) {
+      case "bahasa jepang":
+        return "ja"; // FIX: pakai 'ja' untuk Jepang
+      default:
+        return "id";
+    }
+  };
+
+  const audioUrl = `/api/tts?text=${encodeURIComponent(
+    question.question
+  )}&lang=${getLanguage()}`;
+
+  const handlePlay = async () => {
+    const audio = new Audio(audioUrl);
+    console.log(audio)
+    try {
+      await audio.play();
+    } catch (error) {
+      console.error("Error playing audio:", error);
+    }
+  };
+
+  // Jalankan sekali saja setelah user klik halaman (atau tombol apapun)
+  useEffect(() => {
+    const handleFirstInteraction = () => {
+      setHasInteracted(true);
+      window.removeEventListener("click", handleFirstInteraction);
+    };
+
+    window.addEventListener("click", handleFirstInteraction);
+
+    return () => {
+      window.removeEventListener("click", handleFirstInteraction);
+    };
+  }, []);
+
+  // Setiap soal berubah, otomatis play TTS jika user sudah interaksi
+  useEffect(() => {
+    if (!hasInteracted) return;
+
+    const playAudio = async () => {
+      const audio = new Audio(audioUrl);
+      try {
+        await audio.play();
+      } catch (error) {
+        console.error("Error playing audio:", error);
+      }
+    };
+
+    playAudio();
+  }, [currentQuiz, hasInteracted]);
+
   return {
     question,
     setCurrentQuiz,
@@ -86,5 +143,6 @@ export function useQuizCardLogics() {
     quizState,
     option,
     answer,
+    handlePlay,
   };
 }

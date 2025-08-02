@@ -19,7 +19,6 @@ export function useTimerLogics() {
     useTime,
   } = useConfigStore();
 
-
   const time = useMemo(() => {
     const time = new Date();
     if (useQuestionTime) {
@@ -47,7 +46,11 @@ export function useTimerLogics() {
 
   // Jika terjadi perpindahan soal, restart waktunya
   useEffect(() => {
-    timerRestart(time);
+    if (useTime) {
+      timerRestart(time);
+    } else {
+      pause();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentQuiz]);
 

@@ -89,11 +89,11 @@ export function QuizProvider({ children, questions }: QuizProviderProps) {
   }, [totalQuestion]);
 
   useEffect(() => {
-    if (quizState.isPausedUser) return; // Jangan ganggu kalau user sedang pause
+    if (quizState.isPausedUser) return; 
 
     if (useTime) {
       timer.restart(time);
-    } else {
+    } else {  
       timer.pause();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

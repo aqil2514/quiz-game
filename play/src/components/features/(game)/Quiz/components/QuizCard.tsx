@@ -4,9 +4,10 @@ import { useQuizCardLogics } from "../hooks/useQuizCardLogics";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { fadeUpVariants } from "@/lib/motionVariants";
+import { AiFillSound } from "react-icons/ai";
 
 export default function QuizCard() {
-  const { clickHandler, question, currentQuiz, quizState, answer } =
+  const { clickHandler, question, currentQuiz, quizState, answer,handlePlay } =
     useQuizCardLogics();
 
   return (
@@ -23,14 +24,19 @@ export default function QuizCard() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p
-            className={cn(
-              "text-lg md:text-xl font-bold",
-              quizState.isPausedUser || quizState.isConfig && "blur-sm",
-            )}
-          >
-            {question.question}
-          </p>
+          <div className="flex gap-2">
+            <Button size={"icon"} variant={"ghost"} onClick={handlePlay}>
+              <AiFillSound />
+            </Button>
+            <p
+              className={cn(
+                "text-lg md:text-xl font-bold my-auto",
+                quizState.isPausedUser || (quizState.isConfig && "blur-sm")
+              )}
+            >
+              {question.question}
+            </p>
+          </div>
           {quizState.isAnswered ? (
             <p
               className={`${
@@ -58,7 +64,7 @@ export default function QuizCard() {
                   className={cn(
                     "bg-blue-400 hover:bg-blue-500 active:scale-90 duration-200 cursor-pointer",
                     isCorrectAnswer && "bg-green-500",
-                    isPaused || isConfig && "blur-sm",
+                    isPaused || (isConfig && "blur-sm")
                   )}
                   onClick={clickHandler}
                 >
